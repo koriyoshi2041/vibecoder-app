@@ -7,6 +7,8 @@ import {
   saveChallengeNote,
   type UserProgress,
 } from '../lib/progress'
+import { t } from '../i18n'
+import type { Locale } from '../i18n'
 
 interface Props {
   id: string
@@ -22,6 +24,7 @@ interface Props {
   nextId: string | null
   categoryName: string
   categoryIcon: string
+  locale?: Locale
 }
 
 export default function ChallengeDetail({
@@ -37,6 +40,7 @@ export default function ChallengeDetail({
   nextId,
   categoryName,
   categoryIcon,
+  locale = 'zh',
 }: Props) {
   const [progress, setProgress] = useState<UserProgress | null>(null)
   const [note, setNote] = useState('')
@@ -75,19 +79,21 @@ export default function ChallengeDetail({
   }, [progress, id, note])
 
   const difficultyStyle =
-    difficulty === '入门' ? 'bg-sage-light text-sage' :
-    difficulty === '中级' ? 'bg-cream/40 text-bronze' :
+    difficulty === '入门' || difficulty === 'Beginner' ? 'bg-sage-light text-sage' :
+    difficulty === '中级' || difficulty === 'Intermediate' ? 'bg-cream/40 text-bronze' :
     'bg-dusty-rose-light text-dusty-rose'
 
   const criteriaProgress = criteria.length > 0
     ? completedCriteria.length / criteria.length
     : 0
 
+  const prefix = locale === 'en' ? '/en' : ''
+
   return (
     <div className="max-w-3xl">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-warm-gray mb-6">
-        <a href="/challenges" className="hover:text-rust transition-colors">品味挑战</a>
+        <a href={`${prefix}/challenges`} className="hover:text-rust transition-colors">{t('challenge.breadcrumb', locale)}</a>
         <span>/</span>
         <span>{categoryIcon} {categoryName}</span>
         <span>/</span>
@@ -103,7 +109,7 @@ export default function ChallengeDetail({
           </span>
           {isCompleted && (
             <span className="px-2 py-0.5 rounded text-xs font-medium bg-sage text-white">
-              已完成
+              {t('challenge.completed', locale)}
             </span>
           )}
         </div>
@@ -136,7 +142,7 @@ export default function ChallengeDetail({
       {criteria.length > 0 && (
         <div className="mb-8 rounded-lg border border-light-beige bg-paper-dark p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-charcoal">评判标准（自测）</h2>
+            <h2 className="text-lg font-bold text-charcoal">{t('challenge.criteria', locale)}</h2>
             <span className="text-xs font-mono text-warm-gray">
               {completedCriteria.length}/{criteria.length}
             </span>
@@ -188,18 +194,18 @@ export default function ChallengeDetail({
       {/* Learnings */}
       {learnings && (
         <div className="mb-8 rounded-lg border border-sage/30 bg-sage-light p-5">
-          <h2 className="text-sm font-mono text-sage font-bold mb-2">你会学到</h2>
+          <h2 className="text-sm font-mono text-sage font-bold mb-2">{t('challenge.learnings', locale)}</h2>
           <p className="text-sm text-charcoal-light leading-relaxed">{learnings}</p>
         </div>
       )}
 
       {/* Notes */}
       <div className="mb-8 rounded-lg border border-light-beige bg-paper p-5">
-        <h2 className="text-lg font-bold text-charcoal mb-3">我的笔记</h2>
+        <h2 className="text-lg font-bold text-charcoal mb-3">{t('challenge.notes', locale)}</h2>
         <textarea
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          placeholder="记录你的思考、发现和反思..."
+          placeholder={t('challenge.notesPlaceholder', locale)}
           className="w-full h-32 p-3 bg-paper-dark rounded-lg border border-light-beige text-sm text-charcoal placeholder-warm-gray/60 resize-y focus:outline-none focus:border-rust/40 transition-colors"
         />
         <div className="flex items-center justify-between mt-3">
@@ -207,10 +213,10 @@ export default function ChallengeDetail({
             onClick={handleSaveNote}
             className="px-4 py-1.5 bg-rust text-paper text-sm rounded hover:bg-bronze transition-colors"
           >
-            保存笔记
+            {t('challenge.saveNote', locale)}
           </button>
           {noteSaved && (
-            <span className="text-xs text-sage font-medium">已保存</span>
+            <span className="text-xs text-sage font-medium">{t('challenge.saved', locale)}</span>
           )}
         </div>
       </div>
@@ -225,7 +231,7 @@ export default function ChallengeDetail({
               : 'bg-charcoal text-paper hover:bg-charcoal-light'
           }`}
         >
-          {isCompleted ? '✓ 已完成此挑战 · 点击取消' : '标记为完成 (+20 XP)'}
+          {isCompleted ? t('challenge.completedToggle', locale) : t('challenge.complete', locale)}
         </button>
       </div>
 
@@ -233,27 +239,27 @@ export default function ChallengeDetail({
       <div className="flex items-center justify-between pt-6 border-t border-light-beige">
         {prevId ? (
           <a
-            href={`/challenges/${prevId}`}
+            href={`${prefix}/challenges/${prevId}`}
             className="flex items-center gap-2 text-sm text-charcoal-light hover:text-rust transition-colors group"
           >
             <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
-            <span>上一个: <span className="font-mono font-bold">{prevId}</span></span>
+            <span>{t('challenge.prev', locale)}: <span className="font-mono font-bold">{prevId}</span></span>
           </a>
         ) : <div />}
         <a
-          href="/challenges"
+          href={`${prefix}/challenges`}
           className="text-sm text-warm-gray hover:text-rust transition-colors"
         >
-          返回列表
+          {t('challenge.backToList', locale)}
         </a>
         {nextId ? (
           <a
-            href={`/challenges/${nextId}`}
+            href={`${prefix}/challenges/${nextId}`}
             className="flex items-center gap-2 text-sm text-charcoal-light hover:text-rust transition-colors group"
           >
-            <span>下一个: <span className="font-mono font-bold">{nextId}</span></span>
+            <span>{t('challenge.next', locale)}: <span className="font-mono font-bold">{nextId}</span></span>
             <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>

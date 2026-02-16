@@ -1,17 +1,40 @@
 ---
+import type { Locale } from '../i18n'
+import { t, getLocalizedPath } from '../i18n'
+
+interface Props {
+  locale?: Locale
+}
+
+const { locale = 'zh' } = Astro.props
 const currentPath = Astro.url.pathname
+
+const prefix = locale === 'en' ? '/en' : ''
 const links = [
-  { href: '/', label: '首页' },
-  { href: '/path', label: '学习路径' },
-  { href: '/challenges', label: '品味挑战' },
-  { href: '/projects', label: '项目' },
+  { href: prefix || '/', label: t('nav.home', locale) },
+  { href: `${prefix}/path`, label: t('nav.path', locale) },
+  { href: `${prefix}/challenges`, label: t('nav.challenges', locale) },
+  { href: `${prefix}/projects`, label: t('nav.projects', locale) },
 ]
+
+// Build the language toggle URL
+const otherLocale: Locale = locale === 'en' ? 'zh' : 'en'
+const cleanPath = currentPath.replace(/^\/en/, '') || '/'
+const switchUrl = otherLocale === 'en' ? getLocalizedPath(cleanPath, 'en') : cleanPath
+const switchLabel = otherLocale === 'en' ? 'EN' : '中文'
+
+function isActive(linkHref: string): boolean {
+  if (linkHref === '/' || linkHref === '/en') {
+    return currentPath === '/' || currentPath === '/en' || currentPath === '/en/'
+  }
+  return currentPath.startsWith(linkHref)
+}
 ---
 
 <nav class="sticky top-0 z-50 bg-paper/90 backdrop-blur-sm border-b border-light-beige">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
     <div class="flex items-center justify-between h-14">
-      <a href="/" class="flex items-center gap-2 group">
+      <a href={prefix || '/'} class="flex items-center gap-2 group">
         <span class="font-mono text-sm font-bold text-rust tracking-tight">VC</span>
         <span class="text-sm font-semibold text-charcoal hidden sm:inline">VibeCoder Learn</span>
       </a>
@@ -22,7 +45,7 @@ const links = [
             href={link.href}
             class:list={[
               'px-3 py-1.5 text-sm rounded transition-colors',
-              (currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)))
+              isActive(link.href)
                 ? 'bg-rust text-paper font-medium'
                 : 'text-charcoal-light hover:bg-light-beige'
             ]}
@@ -30,6 +53,12 @@ const links = [
             {link.label}
           </a>
         ))}
+        <a
+          href={switchUrl}
+          class="ml-2 px-2.5 py-1 text-xs font-mono font-medium text-warm-gray border border-light-beige rounded hover:bg-light-beige hover:text-charcoal transition-colors"
+        >
+          {switchLabel}
+        </a>
       </div>
     </div>
   </div>

@@ -1,12 +1,12 @@
 ---
-import Layout from '../../layouts/Layout.astro'
-import ChallengeDetail from '../../components/ChallengeDetail'
-import { parseAllChallenges } from '../../lib/parseChallenges'
+import Layout from '../../../layouts/Layout.astro'
+import ChallengeDetail from '../../../components/ChallengeDetail'
+import { parseAllChallenges } from '../../../lib/parseChallenges'
 import { marked } from 'marked'
-import { categories } from '../../data/challenges'
+import { categories } from '../../../data/challenges.en'
 
 export function getStaticPaths() {
-  const challenges = parseAllChallenges()
+  const challenges = parseAllChallenges('en')
 
   return challenges.map((challenge, index) => ({
     params: { id: challenge.id },
@@ -27,9 +27,11 @@ const prefix = challenge.id.replace(/\d+/, '')
 const category = categories.find(c => c.prefix === prefix)
 const categoryName = category?.name ?? ''
 const categoryIcon = category?.icon ?? ''
+
+const locale = 'en' as const
 ---
 
-<Layout title={`${challenge.id}: ${challenge.title} — VibeCoder Learn`}>
+<Layout title={`${challenge.id}: ${challenge.title} — VibeCoder Learn`} locale={locale}>
   <ChallengeDetail
     client:load
     id={challenge.id}
@@ -44,6 +46,6 @@ const categoryIcon = category?.icon ?? ''
     nextId={nextId}
     categoryName={categoryName}
     categoryIcon={categoryIcon}
-    locale="zh"
+    locale="en"
   />
 </Layout>

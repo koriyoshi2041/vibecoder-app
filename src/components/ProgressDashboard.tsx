@@ -1,9 +1,17 @@
 import { useState, useEffect } from 'react'
 import { loadProgress, saveProgress, updateStreak, getStage, getLevel, type UserProgress } from '../lib/progress'
-import { weeks } from '../data/weeks'
+import { weeks as zhWeeks } from '../data/weeks'
+import { weeks as enWeeks } from '../data/weeks.en'
+import { t } from '../i18n'
+import type { Locale } from '../i18n'
 
-export default function ProgressDashboard() {
+interface Props {
+  locale?: Locale
+}
+
+export default function ProgressDashboard({ locale = 'zh' }: Props) {
   const [progress, setProgress] = useState<UserProgress | null>(null)
+  const weeks = locale === 'en' ? enWeeks : zhWeeks
 
   useEffect(() => {
     const p = loadProgress()
@@ -35,6 +43,8 @@ export default function ProgressDashboard() {
   const prevThreshold = levelThresholds[level - 1] || 0
   const xpProgress = (progress.totalXp - prevThreshold) / (nextThreshold - prevThreshold)
 
+  const prefix = locale === 'en' ? '/en' : ''
+
   return (
     <div className="space-y-6">
       {/* Stage & XP Bar */}
@@ -63,22 +73,22 @@ export default function ProgressDashboard() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatCard
-          label="连续学习"
-          value={`${progress.streak}天`}
+          label={t('progress.streak', locale)}
+          value={`${progress.streak}${t('progress.streakUnit', locale)}`}
           icon="🔥"
         />
         <StatCard
-          label="当前周次"
-          value={`第${progress.currentWeek}周`}
+          label={t('progress.currentWeek', locale)}
+          value={`${t('progress.currentWeekPrefix', locale)}${progress.currentWeek}${t('progress.currentWeekSuffix', locale)}`}
           icon="📅"
         />
         <StatCard
-          label="已完成挑战"
+          label={t('progress.completedChallenges', locale)}
           value={`${progress.completedChallenges.length}/153`}
           icon="✅"
         />
         <StatCard
-          label="总经验值"
+          label={t('progress.totalXp', locale)}
           value={`${progress.totalXp} XP`}
           icon="⭐"
         />
@@ -89,7 +99,7 @@ export default function ProgressDashboard() {
         <div className="bg-light-beige/60 rounded-lg p-5 border border-light-beige">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-charcoal">
-              第{currentWeekData.number}周：{currentWeekData.title}
+              {t('progress.currentWeekPrefix', locale)}{currentWeekData.number}{t('progress.currentWeekSuffix', locale)}{locale === 'zh' ? '：' : ': '}{currentWeekData.title}
             </h3>
             <span className="text-xs font-mono text-warm-gray">
               {Math.round(weekProgress * 100)}%
@@ -104,16 +114,16 @@ export default function ProgressDashboard() {
           <p className="text-sm text-charcoal-light mb-4">{currentWeekData.goal}</p>
           <div className="flex flex-wrap gap-2">
             <a
-              href="/path"
+              href={`${prefix}/path`}
               className="inline-flex items-center gap-1 px-3 py-1.5 bg-rust text-paper text-sm rounded hover:bg-bronze transition-colors"
             >
-              查看学习路径 →
+              {t('progress.viewPath', locale)}
             </a>
             <a
-              href="/challenges"
+              href={`${prefix}/challenges`}
               className="inline-flex items-center gap-1 px-3 py-1.5 bg-paper text-charcoal text-sm rounded border border-light-beige hover:bg-light-beige transition-colors"
             >
-              浏览品味挑战
+              {t('progress.browseChallenges', locale)}
             </a>
           </div>
         </div>

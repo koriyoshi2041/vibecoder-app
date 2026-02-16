@@ -2,24 +2,31 @@
 import '../styles/global.css'
 import Nav from '../components/Nav.astro'
 import { ViewTransitions } from 'astro:transitions'
+import type { Locale } from '../i18n'
+import { t } from '../i18n'
 
 interface Props {
   title?: string
   description?: string
+  locale?: Locale
 }
 
 const {
   title = 'VibeCoder Learn',
-  description = '从零到编排者：AI 时代的软件构建课程'
+  description,
+  locale = 'zh',
 } = Astro.props
+
+const resolvedDescription = description ?? t('layout.description', locale)
+const htmlLang = locale === 'en' ? 'en' : 'zh-CN'
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
+    <meta name="description" content={resolvedDescription} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,7 +35,7 @@ const {
     <title>{title}</title>
   </head>
   <body class="grain min-h-screen font-sans">
-    <Nav />
+    <Nav locale={locale} />
     <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
       <slot />
     </main>

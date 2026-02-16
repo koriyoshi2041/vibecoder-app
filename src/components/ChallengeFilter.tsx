@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react'
-import { categories, type ChallengeCategory } from '../data/challenges'
+import { categories as zhCategories, type ChallengeCategory } from '../data/challenges'
+import { categories as enCategories } from '../data/challenges.en'
 import { loadProgress, saveProgress, toggleChallenge } from '../lib/progress'
+import { t } from '../i18n'
+import type { Locale } from '../i18n'
 
-export default function ChallengeFilter() {
+interface Props {
+  locale?: Locale
+}
+
+export default function ChallengeFilter({ locale = 'zh' }: Props) {
+  const categories = locale === 'en' ? enCategories : zhCategories
   const [activeCategory, setActiveCategory] = useState<string>('all')
   const [completedIds, setCompletedIds] = useState<string[]>([])
 
@@ -26,6 +34,17 @@ export default function ChallengeFilter() {
     setCompletedIds(updated.completedChallenges)
   }
 
+  const prefix = locale === 'en' ? '/en' : ''
+
+  const difficultyMap: Record<string, string> = locale === 'en'
+    ? { '入门': t('difficulty.beginner', 'en'), '中级': t('difficulty.intermediate', 'en'), '高级': t('difficulty.advanced', 'en') }
+    : {}
+
+  function displayDifficulty(d: string): string {
+    if (locale === 'en' && difficultyMap[d]) return difficultyMap[d]
+    return d
+  }
+
   return (
     <div>
       {/* Filter bar */}
@@ -33,7 +52,7 @@ export default function ChallengeFilter() {
         <FilterButton
           active={activeCategory === 'all'}
           onClick={() => setActiveCategory('all')}
-          label={`全部 (${totalCompleted}/153)`}
+          label={`${t('challenges.all', locale)} (${totalCompleted}/153)`}
         />
         {categories.map(cat => {
           const catCompleted = completedIds.filter(id => id.startsWith(cat.prefix)).length
@@ -56,6 +75,9 @@ export default function ChallengeFilter() {
             category={cat}
             completedIds={completedIds}
             onToggle={handleToggle}
+            locale={locale}
+            prefix={prefix}
+            displayDifficulty={displayDifficulty}
           />
         ))}
       </div>
@@ -82,10 +104,16 @@ function CategorySection({
   category,
   completedIds,
   onToggle,
+  locale,
+  prefix,
+  displayDifficulty,
 }: {
   category: ChallengeCategory
   completedIds: string[]
   onToggle: (e: React.MouseEvent, id: string) => void
+  locale: Locale
+  prefix: string
+  displayDifficulty: (d: string) => string
 }) {
   const catCompleted = completedIds.filter(id => id.startsWith(category.prefix)).length
 
@@ -95,7 +123,7 @@ function CategorySection({
         <span className="text-xl">{category.icon}</span>
         <div>
           <h2 className="text-lg font-bold text-charcoal">{category.name}</h2>
-          <p className="text-xs text-warm-gray">{category.description} · {catCompleted}/{category.count} 完成</p>
+          <p className="text-xs text-warm-gray">{category.description} · {catCompleted}/{category.count} {t('challenges.completed', locale)}</p>
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -104,7 +132,7 @@ function CategorySection({
           return (
             <a
               key={ch.id}
-              href={`/challenges/${ch.id}`}
+              href={`${prefix}/challenges/${ch.id}`}
               className={`group relative rounded-lg p-4 border transition-all block ${
                 isCompleted
                   ? 'bg-sage-light border-sage/30 hover:border-sage'
@@ -121,7 +149,7 @@ function CategorySection({
                       ? 'bg-sage border-sage text-white'
                       : 'border-light-beige group-hover:border-warm-gray hover:border-sage'
                   }`}
-                  aria-label={isCompleted ? '取消完成' : '标记完成'}
+                  aria-label={isCompleted ? t('challenges.unmarkComplete', locale) : t('challenges.markComplete', locale)}
                 >
                   {isCompleted && (
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -135,14 +163,14 @@ function CategorySection({
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-warm-gray font-mono">{ch.time}</span>
                 <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                  ch.difficulty === '入门' ? 'bg-sage-light text-sage' :
-                  ch.difficulty === '中级' ? 'bg-cream/40 text-bronze' :
+                  ch.difficulty === '入门' || ch.difficulty === 'Beginner' ? 'bg-sage-light text-sage' :
+                  ch.difficulty === '中级' || ch.difficulty === 'Intermediate' ? 'bg-cream/40 text-bronze' :
                   'bg-dusty-rose-light text-dusty-rose'
                 }`}>
-                  {ch.difficulty}
+                  {displayDifficulty(ch.difficulty)}
                 </span>
                 <span className="ml-auto text-warm-gray/60 group-hover:text-rust transition-colors">
-                  查看 →
+                  {t('challenges.view', locale)}
                 </span>
               </div>
             </a>
