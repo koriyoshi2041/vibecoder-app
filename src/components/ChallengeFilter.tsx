@@ -17,7 +17,9 @@ export default function ChallengeFilter() {
 
   const totalCompleted = completedIds.length
 
-  function handleToggle(challengeId: string) {
+  function handleToggle(e: React.MouseEvent, challengeId: string) {
+    e.preventDefault()
+    e.stopPropagation()
     const progress = loadProgress()
     const updated = toggleChallenge(progress, challengeId)
     saveProgress(updated)
@@ -83,7 +85,7 @@ function CategorySection({
 }: {
   category: ChallengeCategory
   completedIds: string[]
-  onToggle: (id: string) => void
+  onToggle: (e: React.MouseEvent, id: string) => void
 }) {
   const catCompleted = completedIds.filter(id => id.startsWith(category.prefix)).length
 
@@ -100,30 +102,35 @@ function CategorySection({
         {category.challenges.map(ch => {
           const isCompleted = completedIds.includes(ch.id)
           return (
-            <div
+            <a
               key={ch.id}
-              className={`group relative rounded-lg p-4 border transition-all cursor-pointer ${
+              href={`/challenges/${ch.id}`}
+              className={`group relative rounded-lg p-4 border transition-all block ${
                 isCompleted
-                  ? 'bg-sage-light border-sage/30'
-                  : 'bg-paper border-light-beige hover:border-warm-gray hover:shadow-[2px_2px_0_rgba(41,41,41,0.08)]'
+                  ? 'bg-sage-light border-sage/30 hover:border-sage'
+                  : 'bg-paper border-light-beige hover:border-rust hover:shadow-[2px_2px_0_rgba(41,41,41,0.08)]'
               }`}
-              onClick={() => onToggle(ch.id)}
             >
               <div className="flex items-start justify-between mb-2">
                 <span className="font-mono text-xs font-bold text-rust">{ch.id}</span>
-                <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                  isCompleted
-                    ? 'bg-sage border-sage text-white'
-                    : 'border-light-beige group-hover:border-warm-gray'
-                }`}>
+                <button
+                  type="button"
+                  onClick={(e) => onToggle(e, ch.id)}
+                  className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                    isCompleted
+                      ? 'bg-sage border-sage text-white'
+                      : 'border-light-beige group-hover:border-warm-gray hover:border-sage'
+                  }`}
+                  aria-label={isCompleted ? '取消完成' : '标记完成'}
+                >
                   {isCompleted && (
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   )}
-                </div>
+                </button>
               </div>
-              <h3 className="font-semibold text-sm text-charcoal mb-1">{ch.title}</h3>
+              <h3 className="font-semibold text-sm text-charcoal mb-1 group-hover:text-rust transition-colors">{ch.title}</h3>
               <p className="text-xs text-warm-gray mb-2 line-clamp-2">{ch.description}</p>
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-warm-gray font-mono">{ch.time}</span>
@@ -134,8 +141,11 @@ function CategorySection({
                 }`}>
                   {ch.difficulty}
                 </span>
+                <span className="ml-auto text-warm-gray/60 group-hover:text-rust transition-colors">
+                  查看 →
+                </span>
               </div>
-            </div>
+            </a>
           )
         })}
       </div>

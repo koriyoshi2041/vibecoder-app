@@ -79,3 +79,119 @@ body {
   background: var(--color-warm-gray);
   border-radius: 3px;
 }
+
+/* ── Challenge Content (rendered markdown) ── */
+.challenge-content h2,
+.challenge-content h3,
+.challenge-content h4 {
+  font-weight: 700;
+  color: var(--color-charcoal);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.challenge-content h2 { font-size: 1.25rem; }
+.challenge-content h3 { font-size: 1.1rem; }
+
+.challenge-content p {
+  margin-bottom: 0.75em;
+  line-height: 1.7;
+  color: var(--color-charcoal-light);
+  font-size: 0.9rem;
+}
+
+.challenge-content strong {
+  color: var(--color-charcoal);
+  font-weight: 600;
+}
+
+.challenge-content ul,
+.challenge-content ol {
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+}
+
+.challenge-content ul { list-style-type: disc; }
+.challenge-content ol { list-style-type: decimal; }
+
+.challenge-content li {
+  margin-bottom: 0.4em;
+  line-height: 1.6;
+  color: var(--color-charcoal-light);
+  font-size: 0.9rem;
+}
+
+.challenge-content code {
+  background: var(--color-paper-dark);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--color-rust);
+}
+
+.challenge-content pre {
+  background: var(--color-charcoal);
+  color: #e0dcd4;
+  padding: 1em 1.25em;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 1em;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.challenge-content pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+.challenge-content blockquote {
+  border-left: 3px solid var(--color-rust);
+  padding-left: 1em;
+  margin: 1em 0;
+  color: var(--color-warm-gray);
+  font-style: italic;
+}
+
+.challenge-content a {
+  color: var(--color-rust);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.challenge-content a:hover {
+  color: var(--color-bronze);
+}
+
+.challenge-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+  font-size: 0.85rem;
+}
+
+.challenge-content th,
+.challenge-content td {
+  border: 1px solid var(--color-light-beige);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.challenge-content th {
+  background: var(--color-paper-dark);
+  font-weight: 600;
+  color: var(--color-charcoal);
+}
+
+.challenge-content td {
+  color: var(--color-charcoal-light);
+}
+
+.challenge-content hr {
+  border: none;
+  border-top: 1px solid var(--color-light-beige);
+  margin: 1.5em 0;
+}

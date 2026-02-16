@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import PathWeek from '../components/PathWeek'
 import { weeks, stages } from '../data/weeks'
 
 const stageColorBorder = {
@@ -42,53 +43,15 @@ const stageColorText = {
             </div>
           </div>
 
-          {/* Weeks */}
+          {/* Weeks - now interactive */}
           <div class="space-y-4 ml-2 sm:ml-4">
             {stageWeeks.map(week => (
-              <div class={`rounded-lg p-5 border border-light-beige ${stageColorBg[sid]} hover:shadow-[2px_2px_0_rgba(41,41,41,0.06)] transition-all`}>
-                <div class="flex items-start justify-between mb-3">
-                  <div>
-                    <span class={`font-mono text-xs font-bold ${stageColorText[sid]}`}>WEEK {week.number}</span>
-                    <h3 class="text-lg font-bold text-charcoal">{week.title}</h3>
-                  </div>
-                </div>
-                <p class="text-sm text-charcoal-light mb-4">{week.goal}</p>
-
-                {/* Project */}
-                <div class="mb-3">
-                  <p class="text-xs font-mono text-warm-gray mb-1">项目</p>
-                  <p class="text-sm font-medium text-charcoal">{week.project}</p>
-                </div>
-
-                {/* Challenges */}
-                <div class="mb-3">
-                  <p class="text-xs font-mono text-warm-gray mb-2">品味挑战</p>
-                  <div class="flex flex-wrap gap-1.5">
-                    {week.challenges.map(ch => {
-                      const id = ch.split(' ')[0]
-                      return (
-                        <span class="inline-flex items-center px-2 py-0.5 bg-paper rounded text-xs font-mono border border-light-beige">
-                          <span class="text-rust font-bold mr-1">{id}</span>
-                          <span class="text-charcoal-light">{ch.slice(id.length + 1)}</span>
-                        </span>
-                      )
-                    })}
-                  </div>
-                </div>
-
-                {/* Milestones */}
-                <div>
-                  <p class="text-xs font-mono text-warm-gray mb-2">里程碑</p>
-                  <ul class="space-y-1">
-                    {week.milestones.map(m => (
-                      <li class="flex items-start gap-2 text-sm text-charcoal-light">
-                        <span class="text-light-beige mt-0.5">□</span>
-                        <span>{m}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              <PathWeek
+                client:load
+                week={week}
+                stageColorBg={stageColorBg[sid]}
+                stageColorText={stageColorText[sid]}
+              />
             ))}
           </div>
         </div>

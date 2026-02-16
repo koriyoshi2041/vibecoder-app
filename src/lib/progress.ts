@@ -8,6 +8,8 @@ export interface UserProgress {
   streak: number
   lastActiveDate: string
   totalXp: number
+  challengeNotes: Record<string, string>
+  challengeCriteria: Record<string, number[]>
 }
 
 function getDefaultProgress(): UserProgress {
@@ -19,6 +21,8 @@ function getDefaultProgress(): UserProgress {
     streak: 0,
     lastActiveDate: '',
     totalXp: 0,
+    challengeNotes: {},
+    challengeCriteria: {},
   }
 }
 
@@ -94,4 +98,30 @@ export function getLevel(xp: number): number {
   if (xp >= 1500) return 3
   if (xp >= 500) return 2
   return 1
+}
+
+export function saveChallengeNote(progress: UserProgress, challengeId: string, note: string): UserProgress {
+  return {
+    ...progress,
+    challengeNotes: {
+      ...progress.challengeNotes,
+      [challengeId]: note,
+    },
+  }
+}
+
+export function toggleCriterion(progress: UserProgress, challengeId: string, criterionIndex: number): UserProgress {
+  const current = progress.challengeCriteria[challengeId] || []
+  const completed = current.includes(criterionIndex)
+  const updated = completed
+    ? current.filter(i => i !== criterionIndex)
+    : [...current, criterionIndex]
+
+  return {
+    ...progress,
+    challengeCriteria: {
+      ...progress.challengeCriteria,
+      [challengeId]: updated,
+    },
+  }
 }
