@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/* ── Design System: Warm Retro Modern ── */
+@theme {
+  --color-paper: #F5F1E8;
+  --color-paper-dark: #EDE8DB;
+  --color-cream: #DCC78D;
+  --color-light-beige: #DDCFC1;
+  --color-warm-gray: #9A918A;
+  --color-charcoal: #292929;
+  --color-charcoal-light: #4A4540;
+  --color-rust: #8B4513;
+  --color-bronze: #CD853F;
+  --color-terracotta: #E49761;
+  --color-sage: #6B8F71;
+  --color-sage-light: #E8F0E9;
+  --color-dusty-rose: #C4797D;
+  --color-dusty-rose-light: #F5E6E7;
+
+  --font-sans: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-mono: 'Roboto Mono', 'Noto Sans Mono CJK SC', ui-monospace, monospace;
+}
+
+/* ── Base Styles ── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--color-charcoal);
+  background-color: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+}
+
+/* ── Grain Texture ── */
+.grain::after {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 6s steps(8) infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  30% { transform: translate(7%, -15%); }
+  50% { transform: translate(-15%, 10%); }
+  70% { transform: translate(0%, 15%); }
+  90% { transform: translate(-10%, 5%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain::after {
+    animation: none;
+  }
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-warm-gray);
+  border-radius: 3px;
+}

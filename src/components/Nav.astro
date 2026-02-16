@@ -1,0 +1,36 @@
+---
+const currentPath = Astro.url.pathname
+const links = [
+  { href: '/', label: '首页' },
+  { href: '/path', label: '学习路径' },
+  { href: '/challenges', label: '品味挑战' },
+  { href: '/projects', label: '项目' },
+]
+---
+
+<nav class="sticky top-0 z-50 bg-paper/90 backdrop-blur-sm border-b border-light-beige">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-14">
+      <a href="/" class="flex items-center gap-2 group">
+        <span class="font-mono text-sm font-bold text-rust tracking-tight">VC</span>
+        <span class="text-sm font-semibold text-charcoal hidden sm:inline">VibeCoder Learn</span>
+      </a>
+
+      <div class="flex items-center gap-1">
+        {links.map(link => (
+          <a
+            href={link.href}
+            class:list={[
+              'px-3 py-1.5 text-sm rounded transition-colors',
+              currentPath === link.href
+                ? 'bg-rust text-paper font-medium'
+                : 'text-charcoal-light hover:bg-light-beige'
+            ]}
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</nav>
