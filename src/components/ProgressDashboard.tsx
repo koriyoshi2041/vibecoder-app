@@ -1,12 +1,48 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { loadProgress, saveProgress, updateStreak, getStage, getLevel, type UserProgress } from '../lib/progress'
 import { weeks as zhWeeks } from '../data/weeks'
 import { weeks as enWeeks } from '../data/weeks.en'
 import { t } from '../i18n'
 import type { Locale } from '../i18n'
+import { Flame, Calendar, CheckCircle, Star, ArrowRight, BookOpen, Eye, Wrench, Search, Sparkles } from 'lucide-react'
 
 interface Props {
   locale?: Locale
+}
+
+const stageIconMap: Record<string, React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>> = {
+  observer: Eye,
+  practitioner: Wrench,
+  critic: Search,
+  creator: Sparkles,
+}
+
+function useCountUp(end: number, duration = 1200) {
+  const [current, setCurrent] = useState(0)
+  const startedRef = useRef(false)
+
+  useEffect(() => {
+    if (startedRef.current) return
+    startedRef.current = true
+
+    const startTime = performance.now()
+    let frame: number
+
+    const animate = (now: number) => {
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCurrent(Math.round(eased * end))
+      if (progress < 1) {
+        frame = requestAnimationFrame(animate)
+      }
+    }
+
+    frame = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(frame)
+  }, [end, duration])
+
+  return current
 }
 
 export default function ProgressDashboard({ locale = 'zh' }: Props) {
@@ -44,27 +80,25 @@ export default function ProgressDashboard({ locale = 'zh' }: Props) {
   const xpProgress = (progress.totalXp - prevThreshold) / (nextThreshold - prevThreshold)
 
   const prefix = locale === 'en' ? '/en' : ''
+  const StageIcon = stageIconMap[stage.id]
 
   return (
     <div className="space-y-6">
       {/* Stage & XP Bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${stageColors[stage.id]}`}>
-          {stage.id === 'observer' && '👁️'}
-          {stage.id === 'practitioner' && '🔨'}
-          {stage.id === 'critic' && '🔍'}
-          {stage.id === 'creator' && '🚀'}
+        <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium ${stageColors[stage.id]}`}>
+          {StageIcon && <StageIcon size={15} strokeWidth={2} />}
           {stage.label} · Level {level}
         </span>
         <div className="flex-1 w-full">
-          <div className="flex justify-between text-xs text-warm-gray mb-1">
+          <div className="flex justify-between text-xs text-warm-gray mb-1.5 font-mono">
             <span>{progress.totalXp} XP</span>
             <span>{nextThreshold} XP</span>
           </div>
-          <div className="h-2 bg-light-beige rounded-full overflow-hidden">
+          <div className="h-2.5 bg-light-beige rounded-full overflow-hidden">
             <div
-              className="h-full bg-rust rounded-full transition-all duration-500"
-              style={{ width: `${Math.min(100, xpProgress * 100)}%` }}
+              className="h-full bg-gradient-to-r from-rust to-bronze rounded-full xp-shimmer transition-all duration-1000 ease-out"
+              style={{ width: `${Math.max(2, Math.min(100, xpProgress * 100))}%` }}
             />
           </div>
         </div>
@@ -74,29 +108,38 @@ export default function ProgressDashboard({ locale = 'zh' }: Props) {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatCard
           label={t('progress.streak', locale)}
-          value={`${progress.streak}${t('progress.streakUnit', locale)}`}
-          icon="🔥"
+          value={progress.streak}
+          suffix={t('progress.streakUnit', locale)}
+          icon={<Flame size={18} strokeWidth={1.8} />}
+          iconColor="text-terracotta"
         />
         <StatCard
           label={t('progress.currentWeek', locale)}
-          value={`${t('progress.currentWeekPrefix', locale)}${progress.currentWeek}${t('progress.currentWeekSuffix', locale)}`}
-          icon="📅"
+          value={progress.currentWeek}
+          prefix={t('progress.currentWeekPrefix', locale)}
+          suffix={t('progress.currentWeekSuffix', locale)}
+          icon={<Calendar size={18} strokeWidth={1.8} />}
+          iconColor="text-rust"
         />
         <StatCard
           label={t('progress.completedChallenges', locale)}
-          value={`${progress.completedChallenges.length}/153`}
-          icon="✅"
+          value={progress.completedChallenges.length}
+          suffix="/153"
+          icon={<CheckCircle size={18} strokeWidth={1.8} />}
+          iconColor="text-sage"
         />
         <StatCard
           label={t('progress.totalXp', locale)}
-          value={`${progress.totalXp} XP`}
-          icon="⭐"
+          value={progress.totalXp}
+          suffix=" XP"
+          icon={<Star size={18} strokeWidth={1.8} />}
+          iconColor="text-bronze"
         />
       </div>
 
       {/* Current Week */}
       {currentWeekData && (
-        <div className="bg-light-beige/60 rounded-lg p-5 border border-light-beige">
+        <div className="bg-light-beige/50 rounded-lg p-5 border border-light-beige">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-charcoal">
               {t('progress.currentWeekPrefix', locale)}{currentWeekData.number}{t('progress.currentWeekSuffix', locale)}{locale === 'zh' ? '：' : ': '}{currentWeekData.title}
@@ -107,7 +150,7 @@ export default function ProgressDashboard({ locale = 'zh' }: Props) {
           </div>
           <div className="h-1.5 bg-paper rounded-full overflow-hidden mb-3">
             <div
-              className="h-full bg-sage rounded-full transition-all duration-500"
+              className="h-full bg-sage rounded-full transition-all duration-700 ease-out"
               style={{ width: `${weekProgress * 100}%` }}
             />
           </div>
@@ -115,14 +158,16 @@ export default function ProgressDashboard({ locale = 'zh' }: Props) {
           <div className="flex flex-wrap gap-2">
             <a
               href={`${prefix}/path`}
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-rust text-paper text-sm rounded hover:bg-bronze transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-rust text-paper text-sm rounded-md hover:bg-bronze transition-colors"
             >
+              <ArrowRight size={14} strokeWidth={2} />
               {t('progress.viewPath', locale)}
             </a>
             <a
               href={`${prefix}/challenges`}
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-paper text-charcoal text-sm rounded border border-light-beige hover:bg-light-beige transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-paper text-charcoal text-sm rounded-md border border-light-beige hover:bg-light-beige transition-colors"
             >
+              <BookOpen size={14} strokeWidth={2} />
               {t('progress.browseChallenges', locale)}
             </a>
           </div>
@@ -132,12 +177,25 @@ export default function ProgressDashboard({ locale = 'zh' }: Props) {
   )
 }
 
-function StatCard({ label, value, icon }: { label: string; value: string; icon: string }) {
+function StatCard({ label, value, suffix = '', prefix = '', icon, iconColor }: {
+  label: string
+  value: number
+  suffix?: string
+  prefix?: string
+  icon: React.ReactNode
+  iconColor: string
+}) {
+  const count = useCountUp(value)
+
   return (
-    <div className="bg-paper rounded-lg p-3 border border-light-beige text-center">
-      <div className="text-lg mb-0.5">{icon}</div>
-      <div className="text-lg font-bold text-charcoal font-mono">{value}</div>
-      <div className="text-xs text-warm-gray">{label}</div>
+    <div className="card-elevated bg-paper rounded-lg p-4 border border-light-beige text-center">
+      <div className={`flex justify-center mb-1.5 ${iconColor}`}>
+        {icon}
+      </div>
+      <div className="text-lg font-bold text-charcoal font-mono">
+        {prefix}{count}{suffix}
+      </div>
+      <div className="text-xs text-warm-gray mt-0.5">{label}</div>
     </div>
   )
 }

@@ -10,10 +10,10 @@ export interface Week {
 }
 
 export const stages = [
-  { id: 'observer', label: '观察者', weeks: '1-3', color: 'sage', icon: '👁️', description: '建立基本认知，理解互联网和软件是什么' },
-  { id: 'practitioner', label: '实践者', weeks: '4-6', color: 'terracotta', icon: '🔨', description: '开始动手做项目，用 AI 构建真实产品' },
-  { id: 'critic', label: '评论家', weeks: '7-9', color: 'dusty-rose', icon: '🔍', description: '能判断方案好坏，能写出好的规格说明' },
-  { id: 'creator', label: '创造者', weeks: '10-12', color: 'rust', icon: '🚀', description: '能独立设计方案，编排 AI 完成复杂任务' },
+  { id: 'observer', label: '观察者', weeks: '1-3', color: 'sage', icon: 'eye', description: '建立基本认知，理解互联网和软件是什么' },
+  { id: 'practitioner', label: '实践者', weeks: '4-6', color: 'terracotta', icon: 'wrench', description: '开始动手做项目，用 AI 构建真实产品' },
+  { id: 'critic', label: '评论家', weeks: '7-9', color: 'dusty-rose', icon: 'search', description: '能判断方案好坏，能写出好的规格说明' },
+  { id: 'creator', label: '创造者', weeks: '10-12', color: 'rust', icon: 'sparkles', description: '能独立设计方案，编排 AI 完成复杂任务' },
 ] as const
 
 export const weeks: Week[] = [

@@ -1,10 +1,10 @@
 import type { Week } from './weeks'
 
 export const stages = [
-  { id: 'observer', label: 'Observer', weeks: '1-3', color: 'sage', icon: '👁️', description: 'Build foundational knowledge; understand the internet and software' },
-  { id: 'practitioner', label: 'Practitioner', weeks: '4-6', color: 'terracotta', icon: '🔨', description: 'Start building projects; create real products with AI' },
-  { id: 'critic', label: 'Critic', weeks: '7-9', color: 'dusty-rose', icon: '🔍', description: 'Judge solution quality; write solid specifications' },
-  { id: 'creator', label: 'Creator', weeks: '10-12', color: 'rust', icon: '🚀', description: 'Design solutions independently; orchestrate AI for complex tasks' },
+  { id: 'observer', label: 'Observer', weeks: '1-3', color: 'sage', icon: 'eye', description: 'Build foundational knowledge; understand the internet and software' },
+  { id: 'practitioner', label: 'Practitioner', weeks: '4-6', color: 'terracotta', icon: 'wrench', description: 'Start building projects; create real products with AI' },
+  { id: 'critic', label: 'Critic', weeks: '7-9', color: 'dusty-rose', icon: 'search', description: 'Judge solution quality; write solid specifications' },
+  { id: 'creator', label: 'Creator', weeks: '10-12', color: 'rust', icon: 'sparkles', description: 'Design solutions independently; orchestrate AI for complex tasks' },
 ] as const
 
 export const weeks: Week[] = [

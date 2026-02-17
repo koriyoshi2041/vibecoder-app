@@ -1,86 +1,117 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import ProgressDashboard from '../components/ProgressDashboard'
+import StageCard from '../components/StageCard'
+import AnimatedStat from '../components/AnimatedStat'
 import { stages } from '../data/weeks'
 ---
 
 <Layout title="VibeCoder Learn — AI 时代的软件构建课程">
   <!-- Hero -->
-  <section class="py-8 sm:py-12">
-    <p class="font-mono text-sm text-rust mb-3 tracking-wide">2026 VIBE CODER 进阶之路</p>
-    <h1 class="text-3xl sm:text-4xl font-bold text-charcoal leading-tight mb-4">
-      从零到编排者
+  <section class="py-12 sm:py-20">
+    <p class="reveal font-mono text-sm text-rust mb-4 tracking-widest uppercase">2026 Vibe Coder 进阶之路</p>
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-charcoal leading-tight mb-6 hero-title" aria-label="从零到编排者">
+      {Array.from('从零到编排者').map((char, i) => (
+        <span class="hero-char" style={`animation-delay: ${i * 0.06 + 0.2}s`}>{char}</span>
+      ))}
     </h1>
-    <p class="text-lg text-charcoal-light max-w-2xl leading-relaxed mb-2">
+    <p class="reveal text-lg sm:text-xl text-charcoal-light max-w-2xl leading-relaxed mb-3" style="transition-delay: 0.5s">
       你不需要学会写代码，你需要学会<strong class="text-charcoal">指挥 AI 写代码</strong>。
     </p>
-    <p class="text-sm text-warm-gray max-w-2xl">
-      12周结构化学习 · 7个递进式项目 · 153个品味挑战 · 从观察者到创造者
-    </p>
+    <div class="reveal flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-warm-gray max-w-2xl" style="transition-delay: 0.7s">
+      <span class="font-mono">12周结构化学习</span>
+      <span class="text-light-beige">·</span>
+      <span class="font-mono">7个递进式项目</span>
+      <span class="text-light-beige">·</span>
+      <span class="font-mono">153个品味挑战</span>
+    </div>
   </section>
 
   <!-- Dashboard -->
-  <section class="mb-12">
-    <h2 class="text-sm font-mono text-warm-gray mb-4 uppercase tracking-wider">你的进度</h2>
-    <ProgressDashboard client:load locale="zh" />
+  <section class="reveal mb-16">
+    <h2 class="text-xs font-mono text-warm-gray mb-5 uppercase tracking-widest">你的进度</h2>
+    <ProgressDashboard client:visible locale="zh" />
   </section>
 
   <!-- 4 Stages -->
-  <section class="mb-12">
-    <h2 class="text-sm font-mono text-warm-gray mb-6 uppercase tracking-wider">四个阶段</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {stages.map((stage, i) => (
-        <div class="bg-paper rounded-lg p-5 border border-light-beige hover:shadow-[2px_2px_0_rgba(41,41,41,0.08)] transition-all">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="text-xl">{stage.icon}</span>
-            <div>
-              <h3 class="font-bold text-charcoal">{stage.label}</h3>
-              <p class="text-xs font-mono text-warm-gray">第{stage.weeks}周</p>
-            </div>
-          </div>
-          <p class="text-sm text-charcoal-light leading-relaxed">{stage.description}</p>
+  <section class="mb-16">
+    <h2 class="reveal text-xs font-mono text-warm-gray mb-8 uppercase tracking-widest">四个阶段</h2>
+    <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {stages.map((stage) => (
+        <div class="reveal-child">
+          <StageCard
+            client:visible
+            id={stage.id}
+            label={stage.label}
+            weeks={stage.weeks}
+            color={stage.color}
+            icon={stage.icon}
+            description={stage.description}
+            locale="zh"
+          />
         </div>
       ))}
     </div>
   </section>
 
   <!-- Key Stats -->
-  <section class="mb-12">
-    <h2 class="text-sm font-mono text-warm-gray mb-6 uppercase tracking-wider">记住这些数字</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div class="bg-dusty-rose-light rounded-lg p-5 border border-dusty-rose/20">
-        <p class="text-3xl font-bold font-mono text-dusty-rose mb-1">45%</p>
-        <p class="text-sm text-charcoal-light">的 AI 代码引入安全漏洞<br/><span class="text-xs text-warm-gray">Veracode 2025 — 永远验证</span></p>
+  <section class="mb-16">
+    <h2 class="reveal text-xs font-mono text-warm-gray mb-8 uppercase tracking-widest">记住这些数字</h2>
+    <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div class="reveal-child">
+        <AnimatedStat
+          client:visible
+          value={45}
+          suffix="%"
+          color="dusty-rose"
+          label="的 AI 代码引入安全漏洞"
+          sublabel="Veracode 2025 — 永远验证"
+        />
       </div>
-      <div class="bg-sage-light rounded-lg p-5 border border-sage/20">
-        <p class="text-3xl font-bold font-mono text-sage mb-1">80%</p>
-        <p class="text-sm text-charcoal-light">是 AI 能轻松完成的<br/><span class="text-xs text-warm-gray">剩下的20%是你的价值</span></p>
+      <div class="reveal-child">
+        <AnimatedStat
+          client:visible
+          value={80}
+          suffix="%"
+          color="sage"
+          label="是 AI 能轻松完成的"
+          sublabel="剩下的20%是你的价值"
+        />
       </div>
-      <div class="bg-cream/30 rounded-lg p-5 border border-cream/40">
-        <p class="text-3xl font-bold font-mono text-bronze mb-1">19%</p>
-        <p class="text-sm text-charcoal-light">更慢——如果不理解代码<br/><span class="text-xs text-warm-gray">盲目使用 AI 反而拖慢进度</span></p>
+      <div class="reveal-child">
+        <AnimatedStat
+          client:visible
+          value={19}
+          suffix="%"
+          color="bronze"
+          label="更慢——如果不理解代码"
+          sublabel="盲目使用 AI 反而拖慢进度"
+        />
       </div>
     </div>
   </section>
 
   <!-- Quick Links -->
-  <section class="mb-8">
-    <h2 class="text-sm font-mono text-warm-gray mb-6 uppercase tracking-wider">开始探索</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <a href="/path" class="group bg-paper rounded-lg p-5 border border-light-beige hover:border-rust hover:shadow-[2px_2px_0_rgba(139,69,19,0.15)] transition-all">
-        <p class="font-mono text-xs text-rust mb-2">12 WEEKS</p>
-        <h3 class="font-bold text-charcoal group-hover:text-rust transition-colors mb-1">学习路径</h3>
-        <p class="text-sm text-warm-gray">结构化的12周学习计划，从认知到独立创造</p>
+  <section class="mb-12">
+    <h2 class="reveal text-xs font-mono text-warm-gray mb-8 uppercase tracking-widest">开始探索</h2>
+    <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <a href="/path" class="reveal-child group card-elevated bg-paper rounded-lg p-6 border border-light-beige hover:border-rust/40">
+        <p class="font-mono text-xs text-rust mb-3 tracking-wide">12 WEEKS</p>
+        <h3 class="font-bold text-lg text-charcoal group-hover:text-rust transition-colors mb-2">学习路径</h3>
+        <p class="text-sm text-warm-gray leading-relaxed">结构化的12周学习计划，从认知到独立创造</p>
+        <span class="inline-block mt-4 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-opacity duration-300">探索 →</span>
       </a>
-      <a href="/challenges" class="group bg-paper rounded-lg p-5 border border-light-beige hover:border-rust hover:shadow-[2px_2px_0_rgba(139,69,19,0.15)] transition-all">
-        <p class="font-mono text-xs text-rust mb-2">153 CHALLENGES</p>
-        <h3 class="font-bold text-charcoal group-hover:text-rust transition-colors mb-1">品味挑战</h3>
-        <p class="text-sm text-warm-gray">12个维度的品味训练，不写代码也能练判断力</p>
+      <a href="/challenges" class="reveal-child group card-elevated bg-paper rounded-lg p-6 border border-light-beige hover:border-rust/40">
+        <p class="font-mono text-xs text-rust mb-3 tracking-wide">153 CHALLENGES</p>
+        <h3 class="font-bold text-lg text-charcoal group-hover:text-rust transition-colors mb-2">品味挑战</h3>
+        <p class="text-sm text-warm-gray leading-relaxed">12个维度的品味训练，不写代码也能练判断力</p>
+        <span class="inline-block mt-4 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-opacity duration-300">探索 →</span>
       </a>
-      <a href="/projects" class="group bg-paper rounded-lg p-5 border border-light-beige hover:border-rust hover:shadow-[2px_2px_0_rgba(139,69,19,0.15)] transition-all">
-        <p class="font-mono text-xs text-rust mb-2">7 PROJECTS</p>
-        <h3 class="font-bold text-charcoal group-hover:text-rust transition-colors mb-1">主线项目</h3>
-        <p class="text-sm text-warm-gray">递进式实战项目，从名片到生产级系统</p>
+      <a href="/projects" class="reveal-child group card-elevated bg-paper rounded-lg p-6 border border-light-beige hover:border-rust/40">
+        <p class="font-mono text-xs text-rust mb-3 tracking-wide">7 PROJECTS</p>
+        <h3 class="font-bold text-lg text-charcoal group-hover:text-rust transition-colors mb-2">主线项目</h3>
+        <p class="text-sm text-warm-gray leading-relaxed">递进式实战项目，从名片到生产级系统</p>
+        <span class="inline-block mt-4 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-opacity duration-300">探索 →</span>
       </a>
     </div>
   </section>

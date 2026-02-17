@@ -1,6 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import ProgressDashboard from '../../components/ProgressDashboard'
+import StageCard from '../../components/StageCard'
+import AnimatedStat from '../../components/AnimatedStat'
 import { stages } from '../../data/weeks.en'
 import { t } from '../../i18n'
 
@@ -9,81 +11,106 @@ const locale = 'en' as const
 
 <Layout title="VibeCoder Learn — Software Building for the AI Era" locale={locale}>
   <!-- Hero -->
-  <section class="py-8 sm:py-12">
-    <p class="font-mono text-sm text-rust mb-3 tracking-wide">{t('home.subtitle', locale)}</p>
-    <h1 class="text-3xl sm:text-4xl font-bold text-charcoal leading-tight mb-4">
-      {t('home.title', locale)}
+  <section class="py-12 sm:py-20">
+    <p class="reveal font-mono text-sm text-rust mb-4 tracking-widest uppercase">{t('home.subtitle', locale)}</p>
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-charcoal leading-tight mb-6 hero-title">
+      {Array.from(t('home.title', locale)).map((char, i) => (
+        <span class:list={['hero-char', { 'inline-block w-[0.3em]': char === ' ' }]} style={`animation-delay: ${i * 0.04 + 0.2}s`}>{char === ' ' ? '\u00A0' : char}</span>
+      ))}
     </h1>
-    <p class="text-lg text-charcoal-light max-w-2xl leading-relaxed mb-2">
+    <p class="reveal text-lg sm:text-xl text-charcoal-light max-w-2xl leading-relaxed mb-3" style="transition-delay: 0.5s">
       {t('home.desc', locale)} <strong class="text-charcoal">{t('home.desc.bold', locale)}</strong>.
     </p>
-    <p class="text-sm text-warm-gray max-w-2xl">
-      {t('home.meta', locale)}
-    </p>
+    <div class="reveal flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-warm-gray max-w-2xl" style="transition-delay: 0.7s">
+      <span class="font-mono">{t('home.meta', locale)}</span>
+    </div>
   </section>
 
   <!-- Dashboard -->
-  <section class="mb-12">
-    <h2 class="text-sm font-mono text-warm-gray mb-4 uppercase tracking-wider">{t('home.progress', locale)}</h2>
-    <ProgressDashboard client:load locale="en" />
+  <section class="reveal mb-16">
+    <h2 class="text-xs font-mono text-warm-gray mb-5 uppercase tracking-widest">{t('home.progress', locale)}</h2>
+    <ProgressDashboard client:visible locale="en" />
   </section>
 
   <!-- 4 Stages -->
-  <section class="mb-12">
-    <h2 class="text-sm font-mono text-warm-gray mb-6 uppercase tracking-wider">{t('home.stages', locale)}</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {stages.map((stage, i) => (
-        <div class="bg-paper rounded-lg p-5 border border-light-beige hover:shadow-[2px_2px_0_rgba(41,41,41,0.08)] transition-all">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="text-xl">{stage.icon}</span>
-            <div>
-              <h3 class="font-bold text-charcoal">{stage.label}</h3>
-              <p class="text-xs font-mono text-warm-gray">{t('home.stageWeekPrefix', locale)}{stage.weeks}{t('home.stageWeekSuffix', locale)}</p>
-            </div>
-          </div>
-          <p class="text-sm text-charcoal-light leading-relaxed">{stage.description}</p>
+  <section class="mb-16">
+    <h2 class="reveal text-xs font-mono text-warm-gray mb-8 uppercase tracking-widest">{t('home.stages', locale)}</h2>
+    <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {stages.map((stage) => (
+        <div class="reveal-child">
+          <StageCard
+            client:visible
+            id={stage.id}
+            label={stage.label}
+            weeks={stage.weeks}
+            color={stage.color}
+            icon={stage.icon}
+            description={stage.description}
+            locale="en"
+          />
         </div>
       ))}
     </div>
   </section>
 
   <!-- Key Stats -->
-  <section class="mb-12">
-    <h2 class="text-sm font-mono text-warm-gray mb-6 uppercase tracking-wider">{t('home.stats', locale)}</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div class="bg-dusty-rose-light rounded-lg p-5 border border-dusty-rose/20">
-        <p class="text-3xl font-bold font-mono text-dusty-rose mb-1">{t('home.stat1.value', locale)}</p>
-        <p class="text-sm text-charcoal-light">{t('home.stat1.desc', locale)}<br/><span class="text-xs text-warm-gray">{t('home.stat1.source', locale)}</span></p>
+  <section class="mb-16">
+    <h2 class="reveal text-xs font-mono text-warm-gray mb-8 uppercase tracking-widest">{t('home.stats', locale)}</h2>
+    <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div class="reveal-child">
+        <AnimatedStat
+          client:visible
+          value={45}
+          suffix="%"
+          color="dusty-rose"
+          label={t('home.stat1.desc', locale)}
+          sublabel={t('home.stat1.source', locale)}
+        />
       </div>
-      <div class="bg-sage-light rounded-lg p-5 border border-sage/20">
-        <p class="text-3xl font-bold font-mono text-sage mb-1">{t('home.stat2.value', locale)}</p>
-        <p class="text-sm text-charcoal-light">{t('home.stat2.desc', locale)}<br/><span class="text-xs text-warm-gray">{t('home.stat2.source', locale)}</span></p>
+      <div class="reveal-child">
+        <AnimatedStat
+          client:visible
+          value={80}
+          suffix="%"
+          color="sage"
+          label={t('home.stat2.desc', locale)}
+          sublabel={t('home.stat2.source', locale)}
+        />
       </div>
-      <div class="bg-cream/30 rounded-lg p-5 border border-cream/40">
-        <p class="text-3xl font-bold font-mono text-bronze mb-1">{t('home.stat3.value', locale)}</p>
-        <p class="text-sm text-charcoal-light">{t('home.stat3.desc', locale)}<br/><span class="text-xs text-warm-gray">{t('home.stat3.source', locale)}</span></p>
+      <div class="reveal-child">
+        <AnimatedStat
+          client:visible
+          value={19}
+          suffix="%"
+          color="bronze"
+          label={t('home.stat3.desc', locale)}
+          sublabel={t('home.stat3.source', locale)}
+        />
       </div>
     </div>
   </section>
 
   <!-- Quick Links -->
-  <section class="mb-8">
-    <h2 class="text-sm font-mono text-warm-gray mb-6 uppercase tracking-wider">{t('home.explore', locale)}</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <a href="/en/path" class="group bg-paper rounded-lg p-5 border border-light-beige hover:border-rust hover:shadow-[2px_2px_0_rgba(139,69,19,0.15)] transition-all">
-        <p class="font-mono text-xs text-rust mb-2">{t('home.link.path.label', locale)}</p>
-        <h3 class="font-bold text-charcoal group-hover:text-rust transition-colors mb-1">{t('home.link.path.title', locale)}</h3>
-        <p class="text-sm text-warm-gray">{t('home.link.path.desc', locale)}</p>
+  <section class="mb-12">
+    <h2 class="reveal text-xs font-mono text-warm-gray mb-8 uppercase tracking-widest">{t('home.explore', locale)}</h2>
+    <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <a href="/en/path" class="reveal-child group card-elevated bg-paper rounded-lg p-6 border border-light-beige hover:border-rust/40">
+        <p class="font-mono text-xs text-rust mb-3 tracking-wide">{t('home.link.path.label', locale)}</p>
+        <h3 class="font-bold text-lg text-charcoal group-hover:text-rust transition-colors mb-2">{t('home.link.path.title', locale)}</h3>
+        <p class="text-sm text-warm-gray leading-relaxed">{t('home.link.path.desc', locale)}</p>
+        <span class="inline-block mt-4 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-opacity duration-300">Explore →</span>
       </a>
-      <a href="/en/challenges" class="group bg-paper rounded-lg p-5 border border-light-beige hover:border-rust hover:shadow-[2px_2px_0_rgba(139,69,19,0.15)] transition-all">
-        <p class="font-mono text-xs text-rust mb-2">{t('home.link.challenges.label', locale)}</p>
-        <h3 class="font-bold text-charcoal group-hover:text-rust transition-colors mb-1">{t('home.link.challenges.title', locale)}</h3>
-        <p class="text-sm text-warm-gray">{t('home.link.challenges.desc', locale)}</p>
+      <a href="/en/challenges" class="reveal-child group card-elevated bg-paper rounded-lg p-6 border border-light-beige hover:border-rust/40">
+        <p class="font-mono text-xs text-rust mb-3 tracking-wide">{t('home.link.challenges.label', locale)}</p>
+        <h3 class="font-bold text-lg text-charcoal group-hover:text-rust transition-colors mb-2">{t('home.link.challenges.title', locale)}</h3>
+        <p class="text-sm text-warm-gray leading-relaxed">{t('home.link.challenges.desc', locale)}</p>
+        <span class="inline-block mt-4 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-opacity duration-300">Explore →</span>
       </a>
-      <a href="/en/projects" class="group bg-paper rounded-lg p-5 border border-light-beige hover:border-rust hover:shadow-[2px_2px_0_rgba(139,69,19,0.15)] transition-all">
-        <p class="font-mono text-xs text-rust mb-2">{t('home.link.projects.label', locale)}</p>
-        <h3 class="font-bold text-charcoal group-hover:text-rust transition-colors mb-1">{t('home.link.projects.title', locale)}</h3>
-        <p class="text-sm text-warm-gray">{t('home.link.projects.desc', locale)}</p>
+      <a href="/en/projects" class="reveal-child group card-elevated bg-paper rounded-lg p-6 border border-light-beige hover:border-rust/40">
+        <p class="font-mono text-xs text-rust mb-3 tracking-wide">{t('home.link.projects.label', locale)}</p>
+        <h3 class="font-bold text-lg text-charcoal group-hover:text-rust transition-colors mb-2">{t('home.link.projects.title', locale)}</h3>
+        <p class="text-sm text-warm-gray leading-relaxed">{t('home.link.projects.desc', locale)}</p>
+        <span class="inline-block mt-4 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-opacity duration-300">Explore →</span>
       </a>
     </div>
   </section>
