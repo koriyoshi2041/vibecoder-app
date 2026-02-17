@@ -33,27 +33,31 @@ const stageIconSvg: Record<string, string> = {
 ---
 
 <Layout title="Learning Path — VibeCoder Learn" locale={locale}>
-  <section class="py-4 sm:py-8">
-    <p class="font-mono text-sm text-rust mb-2 tracking-wide">{t('path.label', locale)}</p>
-    <h1 class="text-2xl sm:text-3xl font-bold text-charcoal mb-2">{t('path.title', locale)}</h1>
-    <p class="text-charcoal-light mb-8">{t('path.subtitle', locale)}</p>
+  <div class="max-w-6xl mx-auto px-6 sm:px-8 py-8 sm:py-12">
+    <!-- Page Header -->
+    <div class="gsap-fade-up mb-12 sm:mb-16">
+      <span class="section-line gsap-line-expand mb-4 block" />
+      <p class="font-mono text-[11px] text-rust tracking-[0.2em] uppercase mb-3">{t('path.label', locale)}</p>
+      <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal mb-3">{t('path.title', locale)}</h1>
+      <p class="text-charcoal-light text-lg">{t('path.subtitle', locale)}</p>
+    </div>
 
-    {stages.map(stage => {
+    {stages.map((stage) => {
       const stageWeeks = weeks.filter(w => w.stage === stage.id)
       const sid = stage.id as keyof typeof stageColorBorder
       return (
-        <div class="mb-10">
+        <div class="gsap-fade-up mb-14 sm:mb-16">
           {/* Stage header */}
-          <div class={`flex items-center gap-3 mb-5 pb-3 border-b-2 ${stageColorBorder[sid]}`}>
+          <div class={`flex items-center gap-4 mb-6 pb-4 border-b-2 ${stageColorBorder[sid]}`}>
             <span class={`${stageColorText[sid]}`} set:html={stageIconSvg[stage.icon] || ''} />
             <div>
-              <h2 class="text-xl font-bold text-charcoal">{stage.label}</h2>
+              <h2 class="font-serif text-xl sm:text-2xl font-bold text-charcoal">{stage.label}</h2>
               <p class="text-sm text-warm-gray">{t('path.weekPrefix', locale)}{stage.weeks}{t('path.weekSuffix', locale)} · {stage.description}</p>
             </div>
           </div>
 
-          {/* Weeks - now interactive */}
-          <div class="space-y-4 ml-2 sm:ml-4">
+          {/* Weeks */}
+          <div class="space-y-5 ml-0 sm:ml-6">
             {stageWeeks.map(week => (
               <PathWeek
                 client:load
@@ -67,5 +71,5 @@ const stageIconSvg: Record<string, string> = {
         </div>
       )
     })}
-  </section>
+  </div>
 </Layout>

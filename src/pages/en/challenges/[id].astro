@@ -32,20 +32,22 @@ const locale = 'en' as const
 ---
 
 <Layout title={`${challenge.id}: ${challenge.title} — VibeCoder Learn`} locale={locale}>
-  <ChallengeDetail
-    client:load
-    id={challenge.id}
-    title={challenge.title}
-    time={challenge.time}
-    difficulty={challenge.difficulty}
-    repeatable={challenge.repeatable}
-    contentHtml={contentHtml}
-    criteria={challenge.criteria}
-    learnings={challenge.learnings}
-    prevId={prevId}
-    nextId={nextId}
-    categoryName={categoryName}
-    categoryIcon={categoryIcon}
-    locale="en"
-  />
+  <div class="max-w-5xl mx-auto px-6 sm:px-8 py-8 sm:py-12">
+    <ChallengeDetail
+      client:load
+      id={challenge.id}
+      title={challenge.title}
+      time={challenge.time}
+      difficulty={challenge.difficulty}
+      repeatable={challenge.repeatable}
+      contentHtml={contentHtml}
+      criteria={challenge.criteria}
+      learnings={challenge.learnings}
+      prevId={prevId}
+      nextId={nextId}
+      categoryName={categoryName}
+      categoryIcon={categoryIcon}
+      locale="en"
+    />
+  </div>
 </Layout>

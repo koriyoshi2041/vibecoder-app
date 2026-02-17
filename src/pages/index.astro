@@ -6,113 +6,190 @@ import AnimatedStat from '../components/AnimatedStat'
 import { stages } from '../data/weeks'
 ---
 
-<Layout title="VibeCoder Learn — AI 时代的软件构建课程">
-  <!-- Hero -->
-  <section class="py-12 sm:py-20">
-    <p class="reveal font-mono text-sm text-rust mb-4 tracking-widest uppercase">2026 Vibe Coder 进阶之路</p>
-    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-charcoal leading-tight mb-6 hero-title" aria-label="从零到编排者">
-      {Array.from('从零到编排者').map((char, i) => (
-        <span class="hero-char" style={`animation-delay: ${i * 0.06 + 0.2}s`}>{char}</span>
-      ))}
-    </h1>
-    <p class="reveal text-lg sm:text-xl text-charcoal-light max-w-2xl leading-relaxed mb-3" style="transition-delay: 0.5s">
-      你不需要学会写代码，你需要学会<strong class="text-charcoal">指挥 AI 写代码</strong>。
-    </p>
-    <div class="reveal flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-warm-gray max-w-2xl" style="transition-delay: 0.7s">
-      <span class="font-mono">12周结构化学习</span>
-      <span class="text-light-beige">·</span>
-      <span class="font-mono">7个递进式项目</span>
-      <span class="text-light-beige">·</span>
-      <span class="font-mono">153个品味挑战</span>
+<Layout title="VibeCoder Learn — AI 时代的软件构建课程" fullBleed>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero-section ink-wash-hero">
+    <div class="hero-content relative z-10 max-w-6xl mx-auto px-6 sm:px-8">
+      <!-- Overline -->
+      <div class="mb-6 sm:mb-8">
+        <span class="hero-meta inline-block font-mono text-[11px] text-rust tracking-[0.25em] uppercase border-b border-rust/20 pb-1.5">
+          2026 Vibe Coder 进阶之路
+        </span>
+      </div>
+
+      <!-- Title -->
+      <h1
+        class="hero-title font-serif text-[clamp(3.5rem,10vw,8rem)] font-bold text-charcoal leading-[1.05] mb-8 sm:mb-10"
+        style="perspective: 600px"
+        aria-label="从零到编排者"
+      >
+        {Array.from('从零到').map((char, i) => (
+          <span class="char" style={`--i:${i}`}>{char}</span>
+        ))}
+        <br class="sm:hidden" />
+        {Array.from('编排者').map((char, i) => (
+          <span class="char" style={`--i:${i + 3}`}>{char}</span>
+        ))}
+      </h1>
+
+      <!-- Subtitle -->
+      <div class="hero-subtitle max-w-xl mb-4">
+        <p class="text-lg sm:text-xl text-charcoal-light leading-relaxed">
+          你不需要学会写代码
+        </p>
+        <p class="text-lg sm:text-xl text-charcoal leading-relaxed font-medium">
+          你需要学会<span class="text-rust">指挥 AI 写代码</span>。
+        </p>
+      </div>
+
+      <!-- Meta -->
+      <div class="hero-meta flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-sm text-warm-gray mt-8 sm:mt-12">
+        <span>12周结构化学习</span>
+        <span class="w-6 h-px bg-rust/30 hidden sm:block" />
+        <span>7个递进式项目</span>
+        <span class="w-6 h-px bg-rust/30 hidden sm:block" />
+        <span>153个品味挑战</span>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator-wrapper absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+      <span class="font-mono text-[10px] text-warm-gray/60 tracking-[0.3em] uppercase">Scroll</span>
+      <div class="w-px h-10 bg-gradient-to-b from-rust/60 to-transparent scroll-line-anim" />
     </div>
   </section>
 
-  <!-- Dashboard -->
-  <section class="reveal mb-16">
-    <h2 class="text-xs font-mono text-warm-gray mb-5 uppercase tracking-widest">你的进度</h2>
-    <ProgressDashboard client:visible locale="zh" />
+  <!-- ═══ PHILOSOPHY ═══ -->
+  <section class="py-20 sm:py-28">
+    <div class="max-w-4xl mx-auto px-6 sm:px-8 text-center">
+      <div class="section-line-center gsap-line-expand mb-10 sm:mb-14" />
+      <blockquote class="gsap-fade-up font-serif text-2xl sm:text-3xl lg:text-4xl text-charcoal leading-relaxed">
+        "品味不是天赋，<br class="hidden sm:inline"/>是<span class="text-rust font-bold">训练</span>出来的。"
+      </blockquote>
+      <div class="section-line-center gsap-line-expand mt-10 sm:mt-14" />
+    </div>
   </section>
 
-  <!-- 4 Stages -->
-  <section class="mb-16">
-    <h2 class="reveal text-xs font-mono text-warm-gray mb-8 uppercase tracking-widest">四个阶段</h2>
-    <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {stages.map((stage) => (
-        <div class="reveal-child">
-          <StageCard
+  <!-- ═══ DASHBOARD ═══ -->
+  <section class="pb-16 sm:pb-20">
+    <div class="max-w-6xl mx-auto px-6 sm:px-8">
+      <div class="gsap-fade-up mb-8">
+        <span class="section-line gsap-line-expand mb-4 block" />
+        <h2 class="font-mono text-[10px] text-warm-gray tracking-[0.2em] uppercase">你的进度</h2>
+      </div>
+      <div class="gsap-fade-up">
+        <ProgressDashboard client:visible locale="zh" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 4 STAGES ═══ -->
+  <section class="py-16 sm:py-24 ink-wash-subtle">
+    <div class="max-w-6xl mx-auto px-6 sm:px-8">
+      <div class="gsap-fade-up mb-10 sm:mb-14">
+        <span class="section-line gsap-line-expand mb-4 block" />
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-charcoal">四个阶段</h2>
+        <p class="text-sm text-warm-gray mt-2">从观察到创造，一步步构建你的 AI 编排能力</p>
+      </div>
+      <div class="gsap-stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {stages.map((stage) => (
+          <div class="gsap-stagger-item">
+            <StageCard
+              client:visible
+              id={stage.id}
+              label={stage.label}
+              weeks={stage.weeks}
+              color={stage.color}
+              icon={stage.icon}
+              description={stage.description}
+              locale="zh"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ KEY STATS ═══ -->
+  <section class="py-16 sm:py-24 bg-paper-dark">
+    <div class="max-w-6xl mx-auto px-6 sm:px-8">
+      <div class="gsap-fade-up mb-10 sm:mb-14 text-center">
+        <span class="section-line-center gsap-line-expand mb-4 block" />
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-charcoal">记住这些数字</h2>
+      </div>
+      <div class="gsap-stagger grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
+        <div class="gsap-stagger-item">
+          <AnimatedStat
             client:visible
-            id={stage.id}
-            label={stage.label}
-            weeks={stage.weeks}
-            color={stage.color}
-            icon={stage.icon}
-            description={stage.description}
-            locale="zh"
+            value={45}
+            suffix="%"
+            color="dusty-rose"
+            label="的 AI 代码引入安全漏洞"
+            sublabel="Veracode 2025 — 永远验证"
           />
         </div>
-      ))}
-    </div>
-  </section>
-
-  <!-- Key Stats -->
-  <section class="mb-16">
-    <h2 class="reveal text-xs font-mono text-warm-gray mb-8 uppercase tracking-widest">记住这些数字</h2>
-    <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-3 gap-5">
-      <div class="reveal-child">
-        <AnimatedStat
-          client:visible
-          value={45}
-          suffix="%"
-          color="dusty-rose"
-          label="的 AI 代码引入安全漏洞"
-          sublabel="Veracode 2025 — 永远验证"
-        />
-      </div>
-      <div class="reveal-child">
-        <AnimatedStat
-          client:visible
-          value={80}
-          suffix="%"
-          color="sage"
-          label="是 AI 能轻松完成的"
-          sublabel="剩下的20%是你的价值"
-        />
-      </div>
-      <div class="reveal-child">
-        <AnimatedStat
-          client:visible
-          value={19}
-          suffix="%"
-          color="bronze"
-          label="更慢——如果不理解代码"
-          sublabel="盲目使用 AI 反而拖慢进度"
-        />
+        <div class="gsap-stagger-item">
+          <AnimatedStat
+            client:visible
+            value={80}
+            suffix="%"
+            color="sage"
+            label="是 AI 能轻松完成的"
+            sublabel="剩下的20%是你的价值"
+          />
+        </div>
+        <div class="gsap-stagger-item">
+          <AnimatedStat
+            client:visible
+            value={19}
+            suffix="%"
+            color="bronze"
+            label="更慢——如果不理解代码"
+            sublabel="盲目使用 AI 反而拖慢进度"
+          />
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Quick Links -->
-  <section class="mb-12">
-    <h2 class="reveal text-xs font-mono text-warm-gray mb-8 uppercase tracking-widest">开始探索</h2>
-    <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-3 gap-5">
-      <a href="/path" class="reveal-child group card-elevated bg-paper rounded-lg p-6 border border-light-beige hover:border-rust/40">
-        <p class="font-mono text-xs text-rust mb-3 tracking-wide">12 WEEKS</p>
-        <h3 class="font-bold text-lg text-charcoal group-hover:text-rust transition-colors mb-2">学习路径</h3>
-        <p class="text-sm text-warm-gray leading-relaxed">结构化的12周学习计划，从认知到独立创造</p>
-        <span class="inline-block mt-4 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-opacity duration-300">探索 →</span>
-      </a>
-      <a href="/challenges" class="reveal-child group card-elevated bg-paper rounded-lg p-6 border border-light-beige hover:border-rust/40">
-        <p class="font-mono text-xs text-rust mb-3 tracking-wide">153 CHALLENGES</p>
-        <h3 class="font-bold text-lg text-charcoal group-hover:text-rust transition-colors mb-2">品味挑战</h3>
-        <p class="text-sm text-warm-gray leading-relaxed">12个维度的品味训练，不写代码也能练判断力</p>
-        <span class="inline-block mt-4 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-opacity duration-300">探索 →</span>
-      </a>
-      <a href="/projects" class="reveal-child group card-elevated bg-paper rounded-lg p-6 border border-light-beige hover:border-rust/40">
-        <p class="font-mono text-xs text-rust mb-3 tracking-wide">7 PROJECTS</p>
-        <h3 class="font-bold text-lg text-charcoal group-hover:text-rust transition-colors mb-2">主线项目</h3>
-        <p class="text-sm text-warm-gray leading-relaxed">递进式实战项目，从名片到生产级系统</p>
-        <span class="inline-block mt-4 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-opacity duration-300">探索 →</span>
-      </a>
+  <!-- ═══ EXPLORE ═══ -->
+  <section class="py-16 sm:py-24">
+    <div class="max-w-6xl mx-auto px-6 sm:px-8">
+      <div class="gsap-fade-up mb-10 sm:mb-14">
+        <span class="section-line gsap-line-expand mb-4 block" />
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-charcoal">开始探索</h2>
+      </div>
+      <div class="gsap-stagger grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <a href="/path" class="gsap-stagger-item explore-card group bg-paper rounded-xl p-7 sm:p-8 border border-light-beige">
+          <p class="font-mono text-[10px] text-rust tracking-[0.15em] mb-4">12 WEEKS</p>
+          <h3 class="font-serif text-xl font-bold text-charcoal group-hover:text-rust transition-colors mb-3">学习路径</h3>
+          <p class="text-sm text-warm-gray leading-relaxed mb-6">结构化的12周学习计划，从认知到独立创造</p>
+          <span class="inline-flex items-center gap-2 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1">
+            探索
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </span>
+        </a>
+        <a href="/challenges" class="gsap-stagger-item explore-card group bg-paper rounded-xl p-7 sm:p-8 border border-light-beige">
+          <p class="font-mono text-[10px] text-rust tracking-[0.15em] mb-4">153 CHALLENGES</p>
+          <h3 class="font-serif text-xl font-bold text-charcoal group-hover:text-rust transition-colors mb-3">品味挑战</h3>
+          <p class="text-sm text-warm-gray leading-relaxed mb-6">12个维度的品味训练，不写代码也能练判断力</p>
+          <span class="inline-flex items-center gap-2 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1">
+            探索
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </span>
+        </a>
+        <a href="/projects" class="gsap-stagger-item explore-card group bg-paper rounded-xl p-7 sm:p-8 border border-light-beige">
+          <p class="font-mono text-[10px] text-rust tracking-[0.15em] mb-4">7 PROJECTS</p>
+          <h3 class="font-serif text-xl font-bold text-charcoal group-hover:text-rust transition-colors mb-3">主线项目</h3>
+          <p class="text-sm text-warm-gray leading-relaxed mb-6">递进式实战项目，从名片到生产级系统</p>
+          <span class="inline-flex items-center gap-2 text-xs font-mono text-rust opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1">
+            探索
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </span>
+        </a>
+      </div>
     </div>
   </section>
+
 </Layout>

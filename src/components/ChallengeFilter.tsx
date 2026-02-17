@@ -48,7 +48,7 @@ export default function ChallengeFilter({ locale = 'zh' }: Props) {
   return (
     <div>
       {/* Filter bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 -mx-1 px-1">
+      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 -mx-1 px-1 scrollbar-hide">
         <FilterButton
           active={activeCategory === 'all'}
           onClick={() => setActiveCategory('all')}
@@ -68,7 +68,7 @@ export default function ChallengeFilter({ locale = 'zh' }: Props) {
       </div>
 
       {/* Challenge grid */}
-      <div className="space-y-8">
+      <div className="space-y-10">
         {filteredCategories.map(cat => (
           <CategorySection
             key={cat.id}
@@ -89,10 +89,10 @@ function FilterButton({ active, onClick, label }: { active: boolean; onClick: ()
   return (
     <button
       onClick={onClick}
-      className={`whitespace-nowrap px-3 py-1.5 text-sm rounded transition-colors shrink-0 ${
+      className={`whitespace-nowrap px-3.5 py-2 text-sm rounded-lg transition-all duration-300 shrink-0 ${
         active
-          ? 'bg-rust text-paper font-medium'
-          : 'bg-paper text-charcoal-light border border-light-beige hover:bg-light-beige'
+          ? 'bg-rust text-paper font-medium shadow-sm'
+          : 'bg-paper text-charcoal-light border border-light-beige hover:border-rust/40 hover:bg-paper-dark'
       }`}
     >
       {label}
@@ -119,32 +119,32 @@ function CategorySection({
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-4">
+      <div className="flex items-center gap-3 mb-5">
         <span className="text-xl">{category.icon}</span>
         <div>
-          <h2 className="text-lg font-bold text-charcoal">{category.name}</h2>
+          <h2 className="font-serif text-lg font-bold text-charcoal">{category.name}</h2>
           <p className="text-xs text-warm-gray">{category.description} · {catCompleted}/{category.count} {t('challenges.completed', locale)}</p>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {category.challenges.map(ch => {
           const isCompleted = completedIds.includes(ch.id)
           return (
             <a
               key={ch.id}
               href={`${prefix}/challenges/${ch.id}`}
-              className={`group relative rounded-lg p-4 border transition-all block ${
+              className={`group relative rounded-xl p-5 border transition-all duration-400 block ${
                 isCompleted
-                  ? 'bg-sage-light border-sage/30 hover:border-sage'
-                  : 'bg-paper border-light-beige hover:border-rust hover:shadow-[2px_2px_0_rgba(41,41,41,0.08)]'
+                  ? 'bg-sage-light border-sage/20 hover:border-sage/50'
+                  : 'bg-paper border-light-beige hover:border-rust/40 hover:shadow-md hover:-translate-y-1'
               }`}
             >
-              <div className="flex items-start justify-between mb-2">
+              <div className="flex items-start justify-between mb-2.5">
                 <span className="font-mono text-xs font-bold text-rust">{ch.id}</span>
                 <button
                   type="button"
                   onClick={(e) => onToggle(e, ch.id)}
-                  className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                  className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 ${
                     isCompleted
                       ? 'bg-sage border-sage text-white'
                       : 'border-light-beige group-hover:border-warm-gray hover:border-sage'
@@ -158,8 +158,8 @@ function CategorySection({
                   )}
                 </button>
               </div>
-              <h3 className="font-semibold text-sm text-charcoal mb-1 group-hover:text-rust transition-colors">{ch.title}</h3>
-              <p className="text-xs text-warm-gray mb-2 line-clamp-2">{ch.description}</p>
+              <h3 className="font-semibold text-sm text-charcoal mb-1.5 group-hover:text-rust transition-colors">{ch.title}</h3>
+              <p className="text-xs text-warm-gray mb-3 line-clamp-2 leading-relaxed">{ch.description}</p>
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-warm-gray font-mono">{ch.time}</span>
                 <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
@@ -169,8 +169,8 @@ function CategorySection({
                 }`}>
                   {displayDifficulty(ch.difficulty)}
                 </span>
-                <span className="ml-auto text-warm-gray/60 group-hover:text-rust transition-colors">
-                  {t('challenges.view', locale)}
+                <span className="ml-auto text-warm-gray/40 group-hover:text-rust transition-colors text-[11px]">
+                  {t('challenges.view', locale)} &rarr;
                 </span>
               </div>
             </a>

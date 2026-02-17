@@ -3,57 +3,61 @@ import Layout from '../layouts/Layout.astro'
 import { projects } from '../data/projects'
 
 const stageColors = {
-  observer: { bg: 'bg-sage-light', text: 'text-sage', border: 'border-sage/30' },
-  practitioner: { bg: 'bg-cream/30', text: 'text-terracotta', border: 'border-terracotta/30' },
-  critic: { bg: 'bg-dusty-rose-light', text: 'text-dusty-rose', border: 'border-dusty-rose/30' },
-  creator: { bg: 'bg-paper-dark', text: 'text-rust', border: 'border-rust/30' },
+  observer: { bg: 'bg-sage-light', text: 'text-sage', border: 'border-sage/20', accent: 'from-sage to-sage/60' },
+  practitioner: { bg: 'bg-cream/30', text: 'text-terracotta', border: 'border-terracotta/20', accent: 'from-terracotta to-terracotta/60' },
+  critic: { bg: 'bg-dusty-rose-light', text: 'text-dusty-rose', border: 'border-dusty-rose/20', accent: 'from-dusty-rose to-dusty-rose/60' },
+  creator: { bg: 'bg-paper-dark', text: 'text-rust', border: 'border-rust/20', accent: 'from-rust to-rust/60' },
 } as const
 ---
 
 <Layout title="主线项目 — VibeCoder Learn">
-  <section class="py-4 sm:py-8">
-    <p class="font-mono text-sm text-rust mb-2 tracking-wide">PROJECTS</p>
-    <h1 class="text-2xl sm:text-3xl font-bold text-charcoal mb-2">7 个主线项目</h1>
-    <p class="text-charcoal-light mb-8">从个人名片到生产级系统，每个项目都是真实的软件产品。</p>
+  <div class="max-w-6xl mx-auto px-6 sm:px-8 py-8 sm:py-12">
+    <!-- Page Header -->
+    <div class="gsap-fade-up mb-12 sm:mb-16">
+      <span class="section-line gsap-line-expand mb-4 block" />
+      <p class="font-mono text-[11px] text-rust tracking-[0.2em] uppercase mb-3">PROJECTS</p>
+      <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal mb-3">7 个主线项目</h1>
+      <p class="text-charcoal-light text-lg">从个人名片到生产级系统，每个项目都是真实的软件产品。</p>
+    </div>
 
-    <div class="space-y-6">
+    <div class="gsap-stagger space-y-6 sm:space-y-8">
       {projects.map((project) => {
         const colors = stageColors[project.stage as keyof typeof stageColors]
         return (
-          <div class={`rounded-lg p-6 border ${colors.border} ${colors.bg} hover:shadow-[3px_3px_0_rgba(41,41,41,0.08)] transition-all`}>
-            <div class="flex items-start justify-between mb-3">
+          <div class={`gsap-stagger-item project-card rounded-xl p-7 sm:p-8 border ${colors.border} ${colors.bg}`}>
+            <div class="flex items-start justify-between mb-4">
               <div>
-                <div class="flex items-center gap-2 mb-1">
+                <div class="flex items-center gap-3 mb-2">
                   <span class={`font-mono text-xs font-bold ${colors.text}`}>{project.id}</span>
-                  <span class="text-xs text-warm-gray font-mono">{project.weeks}</span>
+                  <span class="text-[11px] text-warm-gray font-mono tracking-wide">{project.weeks}</span>
                 </div>
-                <h2 class="text-xl font-bold text-charcoal">{project.title}</h2>
-                <p class="text-sm text-warm-gray">{project.subtitle}</p>
+                <h2 class="font-serif text-xl sm:text-2xl font-bold text-charcoal">{project.title}</h2>
+                <p class="text-sm text-warm-gray mt-1">{project.subtitle}</p>
               </div>
-              <span class={`text-4xl font-bold font-mono ${colors.text} opacity-20`}>
+              <span class={`text-5xl sm:text-6xl font-bold font-mono ${colors.text} opacity-10 leading-none`}>
                 {String(project.number).padStart(2, '0')}
               </span>
             </div>
 
-            <p class="text-sm text-charcoal-light mb-4 leading-relaxed">{project.description}</p>
+            <p class="text-sm text-charcoal-light mb-6 leading-relaxed max-w-2xl">{project.description}</p>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <p class="text-xs font-mono text-warm-gray mb-2">技能要点</p>
-                <div class="flex flex-wrap gap-1.5">
+                <p class="text-[10px] font-mono text-warm-gray tracking-[0.15em] uppercase mb-3">技能要点</p>
+                <div class="flex flex-wrap gap-2">
                   {project.skills.map(skill => (
-                    <span class="px-2 py-0.5 bg-paper rounded text-xs text-charcoal-light border border-light-beige">
+                    <span class="px-2.5 py-1 bg-paper rounded-md text-xs text-charcoal-light border border-light-beige/80">
                       {skill}
                     </span>
                   ))}
                 </div>
               </div>
               <div>
-                <p class="text-xs font-mono text-warm-gray mb-2">交付物</p>
-                <ul class="space-y-1">
+                <p class="text-[10px] font-mono text-warm-gray tracking-[0.15em] uppercase mb-3">交付物</p>
+                <ul class="space-y-1.5">
                   {project.deliverables.map(d => (
-                    <li class="text-sm text-charcoal-light flex items-center gap-1.5">
-                      <span class="w-1 h-1 rounded-full bg-warm-gray shrink-0"></span>
+                    <li class="text-sm text-charcoal-light flex items-center gap-2">
+                      <span class="w-1 h-1 rounded-full bg-warm-gray/60 shrink-0" />
                       {d}
                     </li>
                   ))}
@@ -65,33 +69,36 @@ const stageColors = {
       })}
     </div>
 
-    {/* Capability Model */}
-    <div class="mt-12 rounded-lg p-6 bg-paper border border-light-beige">
-      <h2 class="text-lg font-bold text-charcoal mb-4">四层能力模型</h2>
+    <!-- Capability Model -->
+    <div class="gsap-fade-up mt-16 sm:mt-20 rounded-xl p-7 sm:p-8 bg-paper border border-light-beige">
+      <div class="mb-6">
+        <span class="section-line gsap-line-expand mb-3 block" />
+        <h2 class="font-serif text-xl sm:text-2xl font-bold text-charcoal">四层能力模型</h2>
+      </div>
       <div class="space-y-3 font-mono text-sm">
-        <div class="flex items-center gap-3 p-3 rounded bg-paper-dark">
-          <span class="text-rust font-bold w-6 text-right">L4</span>
+        <div class="flex items-center gap-4 p-4 rounded-lg bg-paper-dark">
+          <span class="text-rust font-bold w-8 text-right text-lg">L4</span>
           <div class="flex-1">
             <span class="font-bold text-charcoal">编排层</span>
             <span class="text-warm-gray ml-2">多代理协作、规格驱动开发（SDD）</span>
           </div>
         </div>
-        <div class="flex items-center gap-3 p-3 rounded bg-dusty-rose-light">
-          <span class="text-dusty-rose font-bold w-6 text-right">L3</span>
+        <div class="flex items-center gap-4 p-4 rounded-lg bg-dusty-rose-light">
+          <span class="text-dusty-rose font-bold w-8 text-right text-lg">L3</span>
           <div class="flex-1">
             <span class="font-bold text-charcoal">治理层</span>
             <span class="text-warm-gray ml-2">安全审计、代码审查、成本管理</span>
           </div>
         </div>
-        <div class="flex items-center gap-3 p-3 rounded bg-cream/30">
-          <span class="text-terracotta font-bold w-6 text-right">L2</span>
+        <div class="flex items-center gap-4 p-4 rounded-lg bg-cream/30">
+          <span class="text-terracotta font-bold w-8 text-right text-lg">L2</span>
           <div class="flex-1">
             <span class="font-bold text-charcoal">通信层</span>
             <span class="text-warm-gray ml-2">CLAUDE.md、SPEC.md、提示工程</span>
           </div>
         </div>
-        <div class="flex items-center gap-3 p-3 rounded bg-sage-light">
-          <span class="text-sage font-bold w-6 text-right">L1</span>
+        <div class="flex items-center gap-4 p-4 rounded-lg bg-sage-light">
+          <span class="text-sage font-bold w-8 text-right text-lg">L1</span>
           <div class="flex-1">
             <span class="font-bold text-charcoal">基础层</span>
             <span class="text-warm-gray ml-2">互联网原理、数据库、部署</span>
@@ -99,5 +106,5 @@ const stageColors = {
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </Layout>

@@ -3,22 +3,31 @@ import '../styles/global.css'
 import Nav from '../components/Nav.astro'
 import { ViewTransitions } from 'astro:transitions'
 import type { Locale } from '../i18n'
-import { t } from '../i18n'
+import { t, getLocalizedPath } from '../i18n'
 
 interface Props {
   title?: string
   description?: string
   locale?: Locale
+  fullBleed?: boolean
 }
 
 const {
   title = 'VibeCoder Learn',
   description,
   locale = 'zh',
+  fullBleed = false,
 } = Astro.props
 
 const resolvedDescription = description ?? t('layout.description', locale)
 const htmlLang = locale === 'en' ? 'en' : 'zh-CN'
+const prefix = locale === 'en' ? '/en' : ''
+
+const footerLinks = [
+  { href: `${prefix}/path`, label: locale === 'en' ? 'Learning Path' : '学习路径' },
+  { href: `${prefix}/challenges`, label: locale === 'en' ? 'Challenges' : '品味挑战' },
+  { href: `${prefix}/projects`, label: locale === 'en' ? 'Projects' : '主线项目' },
+]
 ---
 
 <!doctype html>
@@ -30,47 +39,374 @@ const htmlLang = locale === 'en' ? 'en' : 'zh-CN'
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700;900&family=Roboto+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <ViewTransitions />
     <title>{title}</title>
   </head>
-  <body class="grain bg-ambient min-h-screen font-sans">
+  <body class="grain min-h-screen font-sans">
+    <!-- Scroll Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-[2px] z-[60]">
+      <div id="scroll-progress" class="h-full bg-gradient-to-r from-rust to-bronze" />
+    </div>
+
     <Nav locale={locale} />
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+
+    <main class:list={[fullBleed ? '' : 'pt-20 sm:pt-24']}>
       <slot />
     </main>
-    <footer class="max-w-5xl mx-auto px-4 sm:px-6 py-12 border-t border-light-beige">
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-warm-gray">
-        <p class="font-mono">VibeCoder Learn &copy; 2026</p>
-        <a
-          href="https://github.com/koriyoshi2041/vibecoder-learn"
-          target="_blank"
-          rel="noopener"
-          class="hover:text-rust transition-colors"
-        >
-          GitHub ↗
-        </a>
+
+    <!-- Footer -->
+    <footer class="relative mt-16 sm:mt-24 border-t border-charcoal/5">
+      <div class="max-w-6xl mx-auto px-6 sm:px-8 py-16 sm:py-20">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-12">
+          <!-- Brand -->
+          <div>
+            <div class="flex items-center gap-3 mb-3">
+              <span class="inline-flex items-center justify-center w-10 h-10 border-2 border-rust rounded-sm font-serif text-sm font-bold text-rust transform -rotate-2">
+                VC
+              </span>
+              <span class="font-serif text-lg text-charcoal">VibeCoder Learn</span>
+            </div>
+            <p class="text-sm text-warm-gray leading-relaxed">
+              {locale === 'en' ? 'Software Building for the AI Era' : 'AI 时代的软件构建课程'}
+            </p>
+          </div>
+
+          <!-- Navigation -->
+          <div>
+            <p class="font-mono text-[10px] text-warm-gray/60 tracking-[0.2em] uppercase mb-4">
+              {locale === 'en' ? 'Navigate' : '导航'}
+            </p>
+            <div class="flex flex-col gap-2.5">
+              {footerLinks.map(link => (
+                <a href={link.href} class="footer-link text-sm text-charcoal-light hover:text-rust w-fit">
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <!-- External -->
+          <div>
+            <p class="font-mono text-[10px] text-warm-gray/60 tracking-[0.2em] uppercase mb-4">
+              {locale === 'en' ? 'Links' : '链接'}
+            </p>
+            <a
+              href="https://github.com/koriyoshi2041/vibecoder-learn"
+              target="_blank"
+              rel="noopener"
+              class="footer-link text-sm text-charcoal-light hover:text-rust w-fit"
+            >
+              GitHub ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Bottom bar -->
+        <div class="mt-14 pt-6 border-t border-charcoal/5 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <span class="font-mono text-[11px] text-warm-gray/50 tracking-wide">
+            &copy; 2026 VibeCoder Learn
+          </span>
+          <span class="font-mono text-[10px] text-warm-gray/30 tracking-[0.3em] uppercase">
+            Est. 2026
+          </span>
+        </div>
       </div>
     </footer>
+
+    <!-- GSAP + Lenis Initialization -->
     <script>
-      function initRevealObserver() {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('revealed');
-                observer.unobserve(entry.target);
-              }
-            });
-          },
-          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-        );
-        document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => {
-          observer.observe(el);
-        });
+      import gsap from 'gsap'
+      import { ScrollTrigger } from 'gsap/ScrollTrigger'
+      import Lenis from 'lenis'
+
+      gsap.registerPlugin(ScrollTrigger)
+
+      let lenisInstance: Lenis | null = null
+      let rafId: number | null = null
+
+      function init() {
+        // Cleanup previous instances
+        if (lenisInstance) {
+          lenisInstance.destroy()
+          lenisInstance = null
+        }
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId)
+          rafId = null
+        }
+        ScrollTrigger.getAll().forEach((t) => t.kill())
+        ScrollTrigger.clearScrollMemory()
+        window.scrollTo(0, 0)
+
+        const prefersReducedMotion = window.matchMedia(
+          '(prefers-reduced-motion: reduce)'
+        ).matches
+
+        // Init Lenis smooth scroll
+        if (!prefersReducedMotion) {
+          lenisInstance = new Lenis({
+            duration: 1.2,
+            easing: (t: number) =>
+              Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+          })
+
+          lenisInstance.on('scroll', ScrollTrigger.update)
+
+          function raf(time: number) {
+            lenisInstance?.raf(time)
+            rafId = requestAnimationFrame(raf)
+          }
+          rafId = requestAnimationFrame(raf)
+        }
+
+        // Setup GSAP animations
+        if (!prefersReducedMotion) {
+          setupAnimations()
+        }
+
+        // Refresh ScrollTrigger after DOM settles
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            ScrollTrigger.refresh()
+          })
+        })
       }
-      initRevealObserver();
-      document.addEventListener('astro:after-swap', initRevealObserver);
+
+      function setupAnimations() {
+        /* ===== HERO ANIMATIONS (immediate, not scroll-triggered) ===== */
+        const heroChars = document.querySelectorAll('.hero-title .char')
+        if (heroChars.length > 0) {
+          gsap.fromTo(
+            heroChars,
+            { opacity: 0, y: 50, rotateX: -80 },
+            {
+              opacity: 1,
+              y: 0,
+              rotateX: 0,
+              duration: 1,
+              stagger: 0.06,
+              ease: 'back.out(1.5)',
+              delay: 0.3,
+            }
+          )
+        }
+
+        document.querySelectorAll('.hero-subtitle').forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.8, delay: 1, ease: 'power3.out' }
+          )
+        })
+
+        document.querySelectorAll('.hero-meta').forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 10 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              delay: 1.4,
+              ease: 'power2.out',
+            }
+          )
+        })
+
+        document.querySelectorAll('.scroll-indicator-wrapper').forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.6, delay: 2, ease: 'power2.out' }
+          )
+        })
+
+        // Hero parallax on scroll
+        const heroSection = document.querySelector('.hero-section')
+        if (heroSection) {
+          const heroContent = heroSection.querySelector('.hero-content')
+          if (heroContent) {
+            gsap.to(heroContent, {
+              y: -150,
+              opacity: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: heroSection,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1.5,
+              },
+            })
+          }
+        }
+
+        /* ===== SCROLL-TRIGGERED ANIMATIONS ===== */
+
+        // Fade up
+        gsap.utils.toArray<HTMLElement>('.gsap-fade-up').forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              ease: 'power3.out',
+              scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+            }
+          )
+        })
+
+        // Stagger children
+        gsap.utils
+          .toArray<HTMLElement>('.gsap-stagger')
+          .forEach((container) => {
+            const items = container.querySelectorAll('.gsap-stagger-item')
+            if (items.length === 0) return
+            gsap.fromTo(
+              items,
+              { opacity: 0, y: 40 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.12,
+                ease: 'power3.out',
+                scrollTrigger: {
+                  trigger: container,
+                  start: 'top 82%',
+                  once: true,
+                },
+              }
+            )
+          })
+
+        // Fade in (opacity only)
+        gsap.utils.toArray<HTMLElement>('.gsap-fade-in').forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0 },
+            {
+              opacity: 1,
+              duration: 1,
+              ease: 'power2.out',
+              scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+            }
+          )
+        })
+
+        // Scale up
+        gsap.utils.toArray<HTMLElement>('.gsap-scale-up').forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, scale: 0.92 },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 1,
+              ease: 'power3.out',
+              scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+            }
+          )
+        })
+
+        // Line expand
+        gsap.utils
+          .toArray<HTMLElement>('.gsap-line-expand')
+          .forEach((el) => {
+            gsap.fromTo(
+              el,
+              { scaleX: 0 },
+              {
+                scaleX: 1,
+                duration: 1.2,
+                ease: 'power3.inOut',
+                scrollTrigger: {
+                  trigger: el,
+                  start: 'top 88%',
+                  once: true,
+                },
+              }
+            )
+          })
+
+        // Character reveal on scroll
+        gsap.utils
+          .toArray<HTMLElement>('.gsap-char-reveal')
+          .forEach((el) => {
+            const chars = el.querySelectorAll('.char')
+            if (chars.length === 0) return
+            gsap.fromTo(
+              chars,
+              { opacity: 0, y: '0.4em' },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.04,
+                ease: 'power3.out',
+                scrollTrigger: {
+                  trigger: el,
+                  start: 'top 85%',
+                  once: true,
+                },
+              }
+            )
+          })
+
+        // Scroll progress bar
+        const progressBar = document.getElementById('scroll-progress')
+        if (progressBar) {
+          gsap.to(progressBar, {
+            scaleX: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: document.documentElement,
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: 0.3,
+            },
+          })
+        }
+
+        // Nav hide/show on scroll direction
+        const nav = document.getElementById('main-nav')
+        if (nav) {
+          let lastScrollY = 0
+          ScrollTrigger.create({
+            onUpdate: (self) => {
+              const scrollY = self.scroll()
+              if (scrollY > lastScrollY && scrollY > 120) {
+                gsap.to(nav, {
+                  y: '-100%',
+                  duration: 0.4,
+                  ease: 'power2.inOut',
+                })
+              } else {
+                gsap.to(nav, {
+                  y: 0,
+                  duration: 0.4,
+                  ease: 'power2.inOut',
+                })
+              }
+              if (scrollY > 60) {
+                nav.classList.add('nav-scrolled')
+              } else {
+                nav.classList.remove('nav-scrolled')
+              }
+              lastScrollY = scrollY
+            },
+          })
+        }
+      }
+
+      // Initialize on every page load (including view transitions)
+      document.addEventListener('astro:page-load', init)
     </script>
   </body>
 </html>

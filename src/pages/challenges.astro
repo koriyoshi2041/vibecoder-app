@@ -4,12 +4,18 @@ import ChallengeFilter from '../components/ChallengeFilter'
 ---
 
 <Layout title="品味挑战 — VibeCoder Learn">
-  <section class="py-4 sm:py-8">
-    <p class="font-mono text-sm text-rust mb-2 tracking-wide">TASTE CHALLENGES</p>
-    <h1 class="text-2xl sm:text-3xl font-bold text-charcoal mb-2">153 个品味挑战</h1>
-    <p class="text-charcoal-light mb-1">品味不是天赋，是训练出来的。</p>
-    <p class="text-sm text-warm-gray mb-8">12个维度 · 每个挑战 30-90 分钟 · 可反复做 · 点击卡片查看详情</p>
+  <div class="max-w-6xl mx-auto px-6 sm:px-8 py-8 sm:py-12">
+    <!-- Page Header -->
+    <div class="gsap-fade-up mb-12 sm:mb-16">
+      <span class="section-line gsap-line-expand mb-4 block" />
+      <p class="font-mono text-[11px] text-rust tracking-[0.2em] uppercase mb-3">TASTE CHALLENGES</p>
+      <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal mb-3">153 个品味挑战</h1>
+      <p class="text-charcoal-light text-lg mb-1">品味不是天赋，是训练出来的。</p>
+      <p class="text-sm text-warm-gray">12个维度 · 每个挑战 30-90 分钟 · 可反复做 · 点击卡片查看详情</p>
+    </div>
 
-    <ChallengeFilter client:load locale="zh" />
-  </section>
+    <div class="gsap-fade-up">
+      <ChallengeFilter client:load locale="zh" />
+    </div>
+  </div>
 </Layout>

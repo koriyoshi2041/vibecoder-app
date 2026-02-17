@@ -91,7 +91,7 @@ export default function ProgressDashboard({ locale = 'zh' }: Props) {
           {stage.label} · Level {level}
         </span>
         <div className="flex-1 w-full">
-          <div className="flex justify-between text-xs text-warm-gray mb-1.5 font-mono">
+          <div className="flex justify-between text-[11px] text-warm-gray mb-1.5 font-mono">
             <span>{progress.totalXp} XP</span>
             <span>{nextThreshold} XP</span>
           </div>
@@ -139,33 +139,33 @@ export default function ProgressDashboard({ locale = 'zh' }: Props) {
 
       {/* Current Week */}
       {currentWeekData && (
-        <div className="bg-light-beige/50 rounded-lg p-5 border border-light-beige">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-charcoal">
+        <div className="bg-light-beige/40 rounded-xl p-6 border border-light-beige/60">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-serif font-bold text-charcoal">
               {t('progress.currentWeekPrefix', locale)}{currentWeekData.number}{t('progress.currentWeekSuffix', locale)}{locale === 'zh' ? '：' : ': '}{currentWeekData.title}
             </h3>
-            <span className="text-xs font-mono text-warm-gray">
+            <span className="text-[11px] font-mono text-warm-gray">
               {Math.round(weekProgress * 100)}%
             </span>
           </div>
-          <div className="h-1.5 bg-paper rounded-full overflow-hidden mb-3">
+          <div className="h-1.5 bg-paper rounded-full overflow-hidden mb-4">
             <div
               className="h-full bg-sage rounded-full transition-all duration-700 ease-out"
               style={{ width: `${weekProgress * 100}%` }}
             />
           </div>
-          <p className="text-sm text-charcoal-light mb-4">{currentWeekData.goal}</p>
-          <div className="flex flex-wrap gap-2">
+          <p className="text-sm text-charcoal-light mb-5 leading-relaxed">{currentWeekData.goal}</p>
+          <div className="flex flex-wrap gap-3">
             <a
               href={`${prefix}/path`}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-rust text-paper text-sm rounded-md hover:bg-bronze transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-rust text-paper text-sm rounded-lg hover:bg-bronze transition-colors duration-300"
             >
               <ArrowRight size={14} strokeWidth={2} />
               {t('progress.viewPath', locale)}
             </a>
             <a
               href={`${prefix}/challenges`}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-paper text-charcoal text-sm rounded-md border border-light-beige hover:bg-light-beige transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-paper text-charcoal text-sm rounded-lg border border-light-beige hover:bg-light-beige transition-colors duration-300"
             >
               <BookOpen size={14} strokeWidth={2} />
               {t('progress.browseChallenges', locale)}
@@ -188,14 +188,14 @@ function StatCard({ label, value, suffix = '', prefix = '', icon, iconColor }: {
   const count = useCountUp(value)
 
   return (
-    <div className="card-elevated bg-paper rounded-lg p-4 border border-light-beige text-center">
+    <div className="bg-paper rounded-xl p-4 border border-light-beige/60 text-center hover:shadow-sm transition-shadow duration-300">
       <div className={`flex justify-center mb-1.5 ${iconColor}`}>
         {icon}
       </div>
-      <div className="text-lg font-bold text-charcoal font-mono">
+      <div className="text-lg font-bold text-charcoal font-mono stat-number">
         {prefix}{count}{suffix}
       </div>
-      <div className="text-xs text-warm-gray mt-0.5">{label}</div>
+      <div className="text-[11px] text-warm-gray mt-0.5">{label}</div>
     </div>
   )
 }

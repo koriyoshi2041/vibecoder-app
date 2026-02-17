@@ -17,7 +17,6 @@ const links = [
   { href: `${prefix}/projects`, label: t('nav.projects', locale) },
 ]
 
-// Build the language toggle URL
 const otherLocale: Locale = locale === 'en' ? 'zh' : 'en'
 const cleanPath = currentPath.replace(/^\/en/, '') || '/'
 const switchUrl = otherLocale === 'en' ? getLocalizedPath(cleanPath, 'en') : cleanPath
@@ -31,31 +30,43 @@ function isActive(linkHref: string): boolean {
 }
 ---
 
-<nav class="sticky top-0 z-50 bg-paper/90 backdrop-blur-sm border-b border-light-beige">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <div class="flex items-center justify-between h-14">
-      <a href={prefix || '/'} class="flex items-center gap-2 group">
-        <span class="font-mono text-sm font-bold text-rust tracking-tight">VC</span>
-        <span class="text-sm font-semibold text-charcoal hidden sm:inline">VibeCoder Learn</span>
+<nav id="main-nav" class="fixed top-0 w-full z-50">
+  <div class="max-w-7xl mx-auto px-6 sm:px-8">
+    <div class="flex items-center justify-between h-16 sm:h-20">
+      <!-- Logo: Seal-style -->
+      <a href={prefix || '/'} class="flex items-center gap-3 group">
+        <span class="seal-logo inline-flex items-center justify-center w-9 h-9 border-2 border-rust rounded-sm font-serif text-sm font-bold text-rust transform -rotate-3">
+          VC
+        </span>
+        <span class="text-sm font-medium text-charcoal hidden sm:inline tracking-wide">
+          VibeCoder Learn
+        </span>
       </a>
 
-      <div class="flex items-center gap-1">
+      <!-- Links -->
+      <div class="flex items-center gap-0.5 sm:gap-1">
         {links.map(link => (
           <a
             href={link.href}
             class:list={[
-              'px-3 py-1.5 text-sm rounded transition-colors',
+              'nav-link px-3 py-1.5 text-sm transition-colors rounded-sm',
               isActive(link.href)
-                ? 'bg-rust text-paper font-medium'
-                : 'text-charcoal-light hover:bg-light-beige'
+                ? 'text-rust font-medium'
+                : 'text-charcoal-light hover:text-charcoal'
             ]}
+            data-active={isActive(link.href) ? '' : undefined}
           >
             {link.label}
           </a>
         ))}
+
+        <!-- Divider -->
+        <span class="w-px h-4 bg-light-beige mx-2 hidden sm:block" />
+
+        <!-- Language Toggle -->
         <a
           href={switchUrl}
-          class="ml-2 px-2.5 py-1 text-xs font-mono font-medium text-warm-gray border border-light-beige rounded hover:bg-light-beige hover:text-charcoal transition-colors"
+          class="px-2.5 py-1 text-xs font-mono text-warm-gray hover:text-rust transition-colors"
         >
           {switchLabel}
         </a>

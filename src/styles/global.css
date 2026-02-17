@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
-/* ── Design System: Warm Retro Modern ── */
+/* ══════════════════════════════════════════════════
+   Design System: Classical Chinese Modern 中式古典现代
+   ══════════════════════════════════════════════════ */
+
 @theme {
+  /* Core palette — 水墨 Ink Wash */
   --color-paper: #F5F1E8;
   --color-paper-dark: #EDE8DB;
   --color-cream: #DCC78D;
@@ -9,7 +13,9 @@
   --color-warm-gray: #9A918A;
   --color-charcoal: #292929;
   --color-charcoal-light: #4A4540;
+  --color-ink: #1E1B16;
   --color-rust: #8B4513;
+  --color-cinnabar: #C04030;
   --color-bronze: #CD853F;
   --color-terracotta: #E49761;
   --color-sage: #6B8F71;
@@ -18,7 +24,30 @@
   --color-dusty-rose-light: #F5E6E7;
 
   --font-sans: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-serif: 'Noto Serif SC', 'Georgia', serif;
   --font-mono: 'Roboto Mono', 'Noto Sans Mono CJK SC', ui-monospace, monospace;
+}
+
+/* ── Lenis Smooth Scroll ── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
 
 /* ── Base Styles ── */
@@ -31,11 +60,12 @@ body {
   background-color: var(--color-paper);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 ::selection {
-  background-color: var(--color-cream);
-  color: var(--color-charcoal);
+  background-color: var(--color-rust);
+  color: var(--color-paper);
 }
 
 /* ── Grain Texture ── */
@@ -46,7 +76,7 @@ body {
   left: -50%;
   width: 200%;
   height: 200%;
-  opacity: 0.04;
+  opacity: 0.035;
   pointer-events: none;
   z-index: 9999;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -62,94 +92,255 @@ body {
   90% { transform: translate(-10%, 5%); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .grain::after {
-    animation: none;
-  }
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar {
+  width: 4px;
 }
 
-/* ── Scroll Reveal Animations ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.reveal.revealed {
-  opacity: 1;
-  transform: translateY(0);
+::-webkit-scrollbar-thumb {
+  background: var(--color-rust);
+  border-radius: 2px;
 }
 
-.reveal-stagger > .reveal-child {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-charcoal);
 }
 
-.reveal-stagger.revealed > .reveal-child {
-  opacity: 1;
-  transform: translateY(0);
+/* ── Scroll Progress Bar ── */
+#scroll-progress {
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
 }
 
-/* Stagger delays for children */
-.reveal-stagger.revealed > .reveal-child:nth-child(1) { transition-delay: 0ms; }
-.reveal-stagger.revealed > .reveal-child:nth-child(2) { transition-delay: 80ms; }
-.reveal-stagger.revealed > .reveal-child:nth-child(3) { transition-delay: 160ms; }
-.reveal-stagger.revealed > .reveal-child:nth-child(4) { transition-delay: 240ms; }
-.reveal-stagger.revealed > .reveal-child:nth-child(5) { transition-delay: 320ms; }
-.reveal-stagger.revealed > .reveal-child:nth-child(6) { transition-delay: 400ms; }
+/* ── Navigation ── */
+#main-nav {
+  transition: border-color 0.4s ease;
+  border-bottom: 1px solid transparent;
+  will-change: transform;
+}
 
-/* ── Hero Text Reveal ── */
-.hero-char {
+#main-nav.nav-scrolled {
+  background-color: rgba(245, 241, 232, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom-color: rgba(221, 207, 193, 0.5);
+}
+
+.nav-link {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--color-rust);
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-link:hover::after,
+.nav-link[data-active]::after {
+  width: 100%;
+}
+
+/* Seal-like logo */
+.seal-logo {
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.seal-logo:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+/* ── Hero Section ── */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-title .char {
   display: inline-block;
   opacity: 0;
-  transform: translateY(0.3em);
-  animation: char-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
 }
 
-@keyframes char-rise {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hero-subtitle {
+  opacity: 0;
 }
 
-/* ── SVG Icon Draw Animation ── */
-.icon-draw svg {
-  overflow: visible;
+.hero-meta {
+  opacity: 0;
 }
 
-.icon-draw path,
-.icon-draw line,
-.icon-draw circle,
-.icon-draw polyline,
-.icon-draw rect {
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  transition: stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+.scroll-indicator-wrapper {
+  opacity: 0;
 }
 
-.revealed .icon-draw path,
-.revealed .icon-draw line,
-.revealed .icon-draw circle,
-.revealed .icon-draw polyline,
-.revealed .icon-draw rect {
-  stroke-dashoffset: 0;
+@keyframes scroll-line {
+  0% { transform: scaleY(0); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: scaleY(1); opacity: 0; }
 }
 
-/* ── Card Hover Effects ── */
+.scroll-line-anim {
+  animation: scroll-line 2s ease-in-out infinite;
+  transform-origin: top;
+}
+
+/* ── Ink Wash Backgrounds ── */
+.ink-wash-hero {
+  background:
+    radial-gradient(ellipse at 8% 15%, rgba(30, 27, 22, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 92% 85%, rgba(139, 69, 19, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(107, 143, 113, 0.03) 0%, transparent 50%),
+    var(--color-paper);
+}
+
+.ink-wash-subtle {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(30, 27, 22, 0.025) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, rgba(139, 69, 19, 0.015) 0%, transparent 50%),
+    var(--color-paper);
+}
+
+/* ── Section Utilities ── */
+.section-line {
+  display: block;
+  width: 60px;
+  height: 1.5px;
+  background: var(--color-rust);
+  opacity: 0.5;
+  transform-origin: left;
+}
+
+.section-line-center {
+  display: block;
+  width: 80px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--color-rust), transparent);
+  margin-left: auto;
+  margin-right: auto;
+  transform-origin: center;
+}
+
+.section-line-full {
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-light-beige), transparent);
+}
+
+/* ── GSAP Animation Initial States ── */
+.gsap-fade-up {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.gsap-stagger-item {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.gsap-fade-in {
+  opacity: 0;
+}
+
+.gsap-scale-up {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+.gsap-line-expand {
+  transform: scaleX(0);
+  transform-origin: center;
+}
+
+/* ── Card Effects ── */
 .card-elevated {
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.3s ease;
   will-change: transform;
 }
 
 .card-elevated:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 20px 40px rgba(30, 27, 22, 0.06),
+    0 8px 16px rgba(30, 27, 22, 0.03);
+}
+
+/* Explore Link Cards */
+.explore-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.explore-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-rust), var(--color-bronze));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.explore-card:hover::before {
+  transform: scaleX(1);
+}
+
+.explore-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px rgba(30, 27, 22, 0.08);
+  border-color: var(--color-rust);
+}
+
+/* Project Cards */
+.project-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-rust), var(--color-bronze));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card:hover::after {
+  transform: scaleX(1);
+}
+
+.project-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(41, 41, 41, 0.06),
-              0 4px 8px rgba(41, 41, 41, 0.04);
+  box-shadow: 0 16px 32px rgba(30, 27, 22, 0.06);
 }
 
 /* ── XP Bar Shimmer ── */
@@ -168,7 +359,7 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.3) 50%,
     transparent 100%
   );
   animation: shimmer 2.5s ease-in-out infinite;
@@ -179,57 +370,48 @@ body {
   100% { left: 200%; }
 }
 
-/* ── Subtle Background Gradient ── */
-.bg-ambient {
-  background:
-    radial-gradient(ellipse at 20% 30%, rgba(107, 143, 113, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(196, 121, 125, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(139, 69, 19, 0.02) 0%, transparent 50%),
-    var(--color-paper);
-  animation: ambient-shift 25s ease-in-out infinite;
+/* ── SVG Icon Draw Animation ── */
+.icon-draw svg {
+  overflow: visible;
 }
 
-@keyframes ambient-shift {
-  0%, 100% { background-position: 0% 0%, 100% 0%, 50% 100%; }
-  33% { background-position: 30% 20%, 70% 30%, 20% 80%; }
-  66% { background-position: 10% 40%, 90% 10%, 80% 60%; }
+.icon-draw path,
+.icon-draw line,
+.icon-draw circle,
+.icon-draw polyline,
+.icon-draw rect {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ── Reduced Motion ── */
-@media (prefers-reduced-motion: reduce) {
-  .reveal, .reveal-stagger > .reveal-child {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-  .hero-char {
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
-  .icon-draw path, .icon-draw line, .icon-draw circle, .icon-draw polyline, .icon-draw rect {
-    stroke-dashoffset: 0;
-    transition: none;
-  }
-  .xp-shimmer::after {
-    animation: none;
-    display: none;
-  }
-  .bg-ambient {
-    animation: none;
-  }
+.icon-draw.drawn path,
+.icon-draw.drawn line,
+.icon-draw.drawn circle,
+.icon-draw.drawn polyline,
+.icon-draw.drawn rect {
+  stroke-dashoffset: 0;
 }
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar {
-  width: 6px;
+/* ── Footer ── */
+.footer-link {
+  position: relative;
+  transition: color 0.3s ease;
 }
-::-webkit-scrollbar-track {
-  background: var(--color-paper);
+
+.footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s ease;
 }
-::-webkit-scrollbar-thumb {
-  background: var(--color-warm-gray);
-  border-radius: 3px;
+
+.footer-link:hover::after {
+  width: 100%;
 }
 
 /* ── Challenge Content (rendered markdown) ── */
@@ -346,4 +528,43 @@ body {
   border: none;
   border-top: 1px solid var(--color-light-beige);
   margin: 1.5em 0;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .gsap-fade-up,
+  .gsap-stagger-item,
+  .gsap-fade-in,
+  .gsap-scale-up {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .gsap-line-expand {
+    transform: scaleX(1) !important;
+  }
+
+  .hero-title .char {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-subtitle,
+  .hero-meta,
+  .scroll-indicator-wrapper {
+    opacity: 1 !important;
+  }
+
+  .grain::after {
+    animation: none;
+  }
+
+  .xp-shimmer::after {
+    animation: none;
+    display: none;
+  }
+
+  .scroll-line-anim {
+    animation: none;
+  }
 }

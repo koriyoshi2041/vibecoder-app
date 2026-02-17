@@ -7,12 +7,18 @@ const locale = 'en' as const
 ---
 
 <Layout title="Taste Challenges — VibeCoder Learn" locale={locale}>
-  <section class="py-4 sm:py-8">
-    <p class="font-mono text-sm text-rust mb-2 tracking-wide">{t('challenges.label', locale)}</p>
-    <h1 class="text-2xl sm:text-3xl font-bold text-charcoal mb-2">{t('challenges.title', locale)}</h1>
-    <p class="text-charcoal-light mb-1">{t('challenges.subtitle', locale)}</p>
-    <p class="text-sm text-warm-gray mb-8">{t('challenges.meta', locale)}</p>
+  <div class="max-w-6xl mx-auto px-6 sm:px-8 py-8 sm:py-12">
+    <!-- Page Header -->
+    <div class="gsap-fade-up mb-12 sm:mb-16">
+      <span class="section-line gsap-line-expand mb-4 block" />
+      <p class="font-mono text-[11px] text-rust tracking-[0.2em] uppercase mb-3">{t('challenges.label', locale)}</p>
+      <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal mb-3">{t('challenges.title', locale)}</h1>
+      <p class="text-charcoal-light text-lg mb-1">{t('challenges.subtitle', locale)}</p>
+      <p class="text-sm text-warm-gray">{t('challenges.meta', locale)}</p>
+    </div>
 
-    <ChallengeFilter client:load locale="en" />
-  </section>
+    <div class="gsap-fade-up">
+      <ChallengeFilter client:load locale="en" />
+    </div>
+  </div>
 </Layout>
